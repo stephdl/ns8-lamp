@@ -30,6 +30,7 @@ config['firstConfig'] = True if not os.path.exists("password.env") else False
 config["mysql_admin_pass"] = agent.read_envfile("password.env")["MYSQL_ADMIN_PASS"] if os.path.exists("password.env") else "Nethesis,1234"
 config["mysql_user_pass"] = agent.read_envfile("password.env")["MYSQL_USER_PASS"] if os.path.exists("password.env") else "Nethesis,1234"
 
+config["create_mysql_user"] = os.getenv("CREATE_MYSQL_USER","False") == "True"
 
 # Dump the configuration to stdout
 json.dump(config, fp=sys.stdout)

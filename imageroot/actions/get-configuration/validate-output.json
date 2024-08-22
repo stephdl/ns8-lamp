@@ -11,7 +11,8 @@
       "mysql_user_name": "user",
       "mysql_user_pass": "password",
       "mysql_admin_pass": "password",
-      "mysql_user_db": "database"
+      "mysql_user_db": "database",
+      "create_mysql_user": true
     }
   ],
   "type": "object",
@@ -22,7 +23,8 @@
     "mysql_user_name",
     "mysql_user_pass",
     "mysql_admin_pass",
-    "mysql_user_db"
+    "mysql_user_db",
+    "create_mysql_user"
   ],
   "properties": {
     "host": {
@@ -58,6 +60,11 @@
       "type": "string",
       "title": "MySQL user database",
       "description": "MySQL user database"
+    },
+    "create_mysql_user": {
+      "type": "boolean",
+      "title": "Create MySQL user",
+      "description": "Create a MySQL user"
     }
   }
 }
