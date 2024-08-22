@@ -10,8 +10,8 @@
 
 [Unit]
 Description=Podman lamp.service
-Requires=mariadb-app.service lamp-app.service
-Before=mariadb-app.service lamp-app.service
+Requires=lamp-app.service
+Before=lamp-app.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
