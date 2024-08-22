@@ -61,11 +61,79 @@
                 $t("settings.enabled")
               }}</template>
             </cv-toggle>
-              <!-- advanced options -->
+            <NsTextInput
+              :label="$t('settings.mysql_admin_pass')"
+              v-model="mysql_admin_pass"
+              :placeholder="$t('settings.mysql_admin_pass')"
+              :disabled="
+                loading.getConfiguration ||
+                loading.configureModule ||
+                !firstConfig
+              "
+              :invalid-message="error.mysql_admin_pass"
+              ref="mysql_admin_pass"
+              :helper-text="$t('settings.mysql_admin_pass')"
+            >
+              <template #tooltip>{{
+                $t("settings.mysql_admin_pass")
+              }}</template>
+            </NsTextInput>
+            <!-- advanced options -->
             <cv-accordion ref="accordion" class="maxwidth mg-bottom">
               <cv-accordion-item :open="toggleAccordion[0]">
                 <template slot="title">{{ $t("settings.advanced") }}</template>
                 <template slot="content">
+                  <NsTextInput
+                    :label="$t('settings.mysql_user_name')"
+                    v-model="mysql_user_name"
+                    :placeholder="$t('settings.mysql_user_name')"
+                    :disabled="
+                      loading.getConfiguration ||
+                      loading.configureModule ||
+                      !firstConfig
+                    "
+                    :invalid-message="error.mysql_user_name"
+                    ref="mysql_user_name"
+                    :helper-text="$t('settings.mysql_user_name')"
+                  >
+                    <template #tooltip>{{
+                      $t("settings.mysql_user_name")
+                    }}</template>
+                  </NsTextInput>
+                  <NsTextInput
+                    :label="$t('settings.mysql_user_pass')"
+                    v-model="mysql_user_name"
+                    :placeholder="$t('settings.mysql_user_pass')"
+                    :disabled="
+                      loading.getConfiguration ||
+                      loading.configureModule ||
+                      !firstConfig
+                    "
+                    :invalid-message="error.mysql_user_pass"
+                    ref="mysql_user_pass"
+                    :helper-text="$t('settings.mysql_user_pass')"
+                  >
+                    <template #tooltip>{{
+                      $t("settings.mysql_user_pass")
+                    }}</template>
+                  </NsTextInput>
+                  <NsTextInput
+                    :label="$t('settings.mysql_user_db')"
+                    v-model="mysql_user_db"
+                    :placeholder="$t('settings.mysql_user_db')"
+                    :disabled="
+                      loading.getConfiguration ||
+                      loading.configureModule ||
+                      !firstConfig
+                    "
+                    :invalid-message="error.mysql_user_db"
+                    ref="mysql_user_db"
+                    :helper-text="$t('settings.mysql_user_db')"
+                  >
+                    <template #tooltip>{{
+                      $t("settings.mysql_user_db")
+                    }}</template>
+                  </NsTextInput>
                 </template>
               </cv-accordion-item>
             </cv-accordion>
@@ -125,6 +193,11 @@ export default {
       host: "",
       isLetsEncryptEnabled: false,
       isHttpToHttpsEnabled: true,
+      mysql_user_name: "",
+      mysql_user_db: "",
+      mysql_user_pass: "",
+      mysql_admin_pass: "",
+      firstConfig: true,
       loading: {
         getConfiguration: false,
         configureModule: false,
@@ -135,6 +208,10 @@ export default {
         host: "",
         lets_encrypt: "",
         http2https: "",
+        mysql_admin_pass: "",
+        mysql_user_db: "",
+        mysql_user_pass: "",
+        mysql_admin_pass: "",
       },
     };
   },
@@ -202,7 +279,11 @@ export default {
       this.host = config.host;
       this.isLetsEncryptEnabled = config.lets_encrypt;
       this.isHttpToHttpsEnabled = config.http2https;
-
+      this.mysql_user_name = config.mysql_user_name;
+      this.mysql_user_db = cpnfig.mysql_user_db;
+      this.mysql_user_pass = config.mysql_user_pass;
+      this.mysql_admin_pass = config.mysql_admin_pass;
+      this.firstConfig = config.firstConfig;
       this.loading.getConfiguration = false;
       this.focusElement("host");
     },
@@ -215,6 +296,14 @@ export default {
 
         if (isValidationOk) {
           this.focusElement("host");
+        }
+        isValidationOk = false;
+      }
+      if (!this.mysql_admin_pass) {
+        this.error.mysql_admin_pass = "common.required";
+
+        if (isValidationOk) {
+          this.focusElement("mysql_admin_pass");
         }
         isValidationOk = false;
       }
@@ -271,6 +360,10 @@ export default {
             host: this.host,
             lets_encrypt: this.isLetsEncryptEnabled,
             http2https: this.isHttpToHttpsEnabled,
+            mysql_user_name: this.mysql_user_name,
+            mysql_user_db: this.mysql_user_db,
+            mysql_user_pass: this.mysql_user_pass,
+            mysql_admin_pass: this.mysql_admin_pass,
           },
           extra: {
             title: this.$t("settings.instance_configuration", {
