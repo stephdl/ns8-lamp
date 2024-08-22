@@ -20,7 +20,16 @@ config = {}
 # Read current configuration from the environment file
 config["host"] = os.getenv("TRAEFIK_HOST","")
 config["http2https"] = os.getenv("TRAEFIK_HTTP2HTTPS") == "True"
-config["lets_encrypt"] = os.getenv("TRAEFIK_LETS_ENCRYPT") == "True"
+config["lets_encrypt"] = os.getenv("TRAEFIK_LETS_ENCRYPT") == "True",
+config["mysql_user_name"] = os.getenv("MYSQL_USER_NAME","")
+config["mysql_user_db"] = os.getenv("MYSQL_USER_DB","")
+
+# check if the mysql is configured
+config['firstConfig'] = True if os.path.exists("password.env") else False
+
+config["mysql_admin_pass"] = agent.read_envfile("password.env")["MYSQL_ADMIN_PASS"] if os.path.exists("password.env") else "Nethesis,1234"
+config["mysql_user_pass"] = agent.read_envfile("password.env")["MYSQL_USER_PASS"] if os.path.exists("password.env") else "Nethesis,1234"
+
 
 # Dump the configuration to stdout
 json.dump(config, fp=sys.stdout)
