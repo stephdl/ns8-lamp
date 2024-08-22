@@ -38,4 +38,4 @@ podman run \
   --env MARIADB_USER=lamp \
   --env MARIADB_PASSWORD=lamp \
   --replace --name=restore_db \
-  ${MARIADB_IMAGE}
+  ${LAMP_SERVER_IMAGE}
