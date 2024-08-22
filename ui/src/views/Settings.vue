@@ -83,57 +83,77 @@
               <cv-accordion-item :open="toggleAccordion[0]">
                 <template slot="title">{{ $t("settings.advanced") }}</template>
                 <template slot="content">
-                  <NsTextInput
-                    :label="$t('settings.mysql_user_name')"
-                    v-model="mysql_user_name"
-                    :placeholder="$t('settings.mysql_user_name')"
+                  <cv-toggle
+                    value="create_mysql_user"
+                    :label="$t('settings.create_mysql_user')"
+                    v-model="create_mysql_user"
                     :disabled="
                       loading.getConfiguration ||
                       loading.configureModule ||
                       !firstConfig
                     "
-                    :invalid-message="error.mysql_user_name"
-                    ref="mysql_user_name"
-                    :helper-text="$t('settings.mysql_user_name')"
+                    class="mg-bottom"
                   >
-                    <template #tooltip>{{
-                      $t("settings.mysql_user_name")
+                    <template slot="text-left">{{
+                      $t("settings.disabled")
                     }}</template>
-                  </NsTextInput>
-                  <NsTextInput
-                    :label="$t('settings.mysql_user_pass')"
-                    v-model="mysql_user_pass"
-                    :placeholder="$t('settings.mysql_user_pass')"
-                    :disabled="
-                      loading.getConfiguration ||
-                      loading.configureModule ||
-                      !firstConfig
-                    "
-                    :invalid-message="error.mysql_user_pass"
-                    ref="mysql_user_pass"
-                    :helper-text="$t('settings.mysql_user_pass')"
-                  >
-                    <template #tooltip>{{
-                      $t("settings.mysql_user_pass")
+                    <template slot="text-right">{{
+                      $t("settings.enabled")
                     }}</template>
-                  </NsTextInput>
-                  <NsTextInput
-                    :label="$t('settings.mysql_user_db')"
-                    v-model="mysql_user_db"
-                    :placeholder="$t('settings.mysql_user_db')"
-                    :disabled="
-                      loading.getConfiguration ||
-                      loading.configureModule ||
-                      !firstConfig
-                    "
-                    :invalid-message="error.mysql_user_db"
-                    ref="mysql_user_db"
-                    :helper-text="$t('settings.mysql_user_db')"
-                  >
-                    <template #tooltip>{{
-                      $t("settings.mysql_user_db")
-                    }}</template>
-                  </NsTextInput>
+                  </cv-toggle>
+                  <template v-if="create_mysql_user">
+                    <NsTextInput
+                      :label="$t('settings.mysql_user_name')"
+                      v-model="mysql_user_name"
+                      :placeholder="$t('settings.mysql_user_name')"
+                      :disabled="
+                        loading.getConfiguration ||
+                        loading.configureModule ||
+                        !firstConfig
+                      "
+                      :invalid-message="error.mysql_user_name"
+                      ref="mysql_user_name"
+                      :helper-text="$t('settings.mysql_user_name')"
+                    >
+                      <template #tooltip>{{
+                        $t("settings.mysql_user_name")
+                      }}</template>
+                    </NsTextInput>
+                    <NsTextInput
+                      :label="$t('settings.mysql_user_pass')"
+                      v-model="mysql_user_pass"
+                      :placeholder="$t('settings.mysql_user_pass')"
+                      :disabled="
+                        loading.getConfiguration ||
+                        loading.configureModule ||
+                        !firstConfig
+                      "
+                      :invalid-message="error.mysql_user_pass"
+                      ref="mysql_user_pass"
+                      :helper-text="$t('settings.mysql_user_pass')"
+                    >
+                      <template #tooltip>{{
+                        $t("settings.mysql_user_pass")
+                      }}</template>
+                    </NsTextInput>
+                    <NsTextInput
+                      :label="$t('settings.mysql_user_db')"
+                      v-model="mysql_user_db"
+                      :placeholder="$t('settings.mysql_user_db')"
+                      :disabled="
+                        loading.getConfiguration ||
+                        loading.configureModule ||
+                        !firstConfig
+                      "
+                      :invalid-message="error.mysql_user_db"
+                      ref="mysql_user_db"
+                      :helper-text="$t('settings.mysql_user_db')"
+                    >
+                      <template #tooltip>{{
+                        $t("settings.mysql_user_db")
+                      }}</template>
+                    </NsTextInput>
+                  </template>
                 </template>
               </cv-accordion-item>
             </cv-accordion>
@@ -193,6 +213,7 @@ export default {
       host: "",
       isLetsEncryptEnabled: false,
       isHttpToHttpsEnabled: true,
+      create_mysql_user: false,
       mysql_user_name: "",
       mysql_user_db: "",
       mysql_user_pass: "",
@@ -285,6 +306,7 @@ export default {
       this.mysql_admin_pass = config.mysql_admin_pass;
       this.firstConfig = config.firstConfig;
       this.loading.getConfiguration = false;
+      this.create_mysql_user = config.create_mysql_user;
       this.focusElement("host");
     },
     validateConfigureModule() {
@@ -364,6 +386,7 @@ export default {
             mysql_user_db: this.mysql_user_db,
             mysql_user_pass: this.mysql_user_pass,
             mysql_admin_pass: this.mysql_admin_pass,
+            create_mysql_user: this.create_mysql_user,
           },
           extra: {
             title: this.$t("settings.instance_configuration", {
