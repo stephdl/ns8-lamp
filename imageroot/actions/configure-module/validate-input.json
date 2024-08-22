@@ -22,7 +22,8 @@
     "mysql_user_name",
     "mysql_user_pass",
     "mysql_admin_pass",
-    "mysql_user_db"
+    "mysql_user_db",
+    "create_mysql_user"
   ],
   "properties": {
     "host": {
@@ -44,35 +45,27 @@
     "mysql_admin_pass": {
       "type": "string",
       "title": "MySQL admin password",
-      "description": "MySQL admin password",
-      "pattern": "^[a-zA-Z0-9_]+$"
+      "description": "MySQL admin password"
     },
     "mysql_user_name": {
       "type": "string",
       "title": "MySQL user name",
-      "description": "MySQL user name",
-      "anyOf": [
-        { "type": "string", "pattern": "^[a-zA-Z0-9_]+$" },
-        { "type": "string", "maxLength": 0 }
-      ]
+      "description": "MySQL user name"
     },
     "mysql_user_pass": {
       "type": "string",
       "title": "MySQL user password",
-      "description": "MySQL user password",
-      "anyOf": [
-        { "type": "string", "pattern": "^[a-zA-Z0-9_]+$" },
-        { "type": "string", "maxLength": 0 }
-      ]
+      "description": "MySQL user password"
     },
     "mysql_user_db": {
       "type": "string",
       "title": "MySQL user database",
-      "description": "MySQL user database",
-      "anyOf": [
-        { "type": "string", "pattern": "^[a-zA-Z0-9_]+$" },
-        { "type": "string", "maxLength": 0 }
-      ]
+      "description": "MySQL user database"
+    },
+    "create_mysql_user": {
+      "type": "boolean",
+      "title": "Create MySQL user",
+      "description": "Create a MySQL user with the provided credentials"
     }
   }
 }
