@@ -7,14 +7,22 @@
         {
             "host": "lamp.domain.org",
             "http2https": true,
-            "lets_encrypt": true
+            "lets_encrypt": true,
+            "mysql_user_name": "user",
+            "mysql_user_pass": "password",
+            "mysql_admin_pass": "password",
+            "mysql_user_db": "database"
         }
     ],
     "type": "object",
     "required": [
         "host",
         "http2https",
-        "lets_encrypt"
+        "lets_encrypt",
+        "mysql_user_name",
+        "mysql_user_pass",
+        "mysql_admin_pass",
+        "mysql_user_db"
     ],
     "properties": {
         "host": {
@@ -32,6 +40,30 @@
             "type": "boolean",
             "title": "HTTP to HTTPS redirection",
             "description": "Redirect all the HTTP requests to HTTPS"
+        },
+        "mysql_user_name": {
+            "type": "string",
+            "title": "MySQL user name",
+            "description": "MySQL user name",
+            "pattern": "^[a-zA-Z0-9_]+$"
+        },
+        "mysql_user_pass": {
+            "type": "string",
+            "title": "MySQL user password",
+            "description": "MySQL user password",
+            "pattern": "^[a-zA-Z0-9_]+$"
+        },
+        "mysql_admin_pass": {
+            "type": "string",
+            "title": "MySQL admin password",
+            "description": "MySQL admin password",
+            "pattern": "^[a-zA-Z0-9_]+$"
+        },
+        "mysql_user_db": {
+            "type": "string",
+            "title": "MySQL user database",
+            "description": "MySQL user database",
+            "pattern": "^[a-zA-Z0-9_]+$"
         }
     }
 }
