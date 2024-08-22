@@ -27,9 +27,7 @@
   "properties": {
     "host": {
       "type": "string",
-      "description": "Host name for the application, like 'lamp.domain.org'",
-      "format": "hostname",
-      "pattern": "\\."
+      "description": "Host name for the application, like 'lamp.domain.org'"
     },
     "lets_encrypt": {
       "type": "boolean",
@@ -44,26 +42,22 @@
     "mysql_user_name": {
       "type": "string",
       "title": "MySQL user name",
-      "description": "MySQL user name",
-      "pattern": "^[a-zA-Z0-9_]+$"
+      "description": "MySQL user name"
     },
     "mysql_user_pass": {
       "type": "string",
       "title": "MySQL user password",
-      "description": "MySQL user password",
-      "pattern": "^[a-zA-Z0-9_]+$"
+      "description": "MySQL user password"
     },
     "mysql_admin_pass": {
       "type": "string",
       "title": "MySQL admin password",
-      "description": "MySQL admin password",
-      "pattern": "^[a-zA-Z0-9_]+$"
+      "description": "MySQL admin password"
     },
     "mysql_user_db": {
       "type": "string",
       "title": "MySQL user database",
-      "description": "MySQL user database",
-      "pattern": "^[a-zA-Z0-9_]+$"
+      "description": "MySQL user database"
     }
   }
 }
