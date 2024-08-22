@@ -208,7 +208,7 @@ export default {
         host: "",
         lets_encrypt: "",
         http2https: "",
-        mysql_admin_pass: "",
+        mysql_user_name: "",
         mysql_user_db: "",
         mysql_user_pass: "",
         mysql_admin_pass: "",
@@ -280,7 +280,7 @@ export default {
       this.isLetsEncryptEnabled = config.lets_encrypt;
       this.isHttpToHttpsEnabled = config.http2https;
       this.mysql_user_name = config.mysql_user_name;
-      this.mysql_user_db = cpnfig.mysql_user_db;
+      this.mysql_user_db = config.mysql_user_db;
       this.mysql_user_pass = config.mysql_user_pass;
       this.mysql_admin_pass = config.mysql_admin_pass;
       this.firstConfig = config.firstConfig;
