@@ -102,7 +102,7 @@
                   </NsTextInput>
                   <NsTextInput
                     :label="$t('settings.mysql_user_pass')"
-                    v-model="mysql_user_name"
+                    v-model="mysql_user_pass"
                     :placeholder="$t('settings.mysql_user_pass')"
                     :disabled="
                       loading.getConfiguration ||
