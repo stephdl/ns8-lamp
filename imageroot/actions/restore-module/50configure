@@ -21,6 +21,7 @@ configure_retval = agent.tasks.run(agent_id=os.environ['AGENT_ID'], action='conf
     "mysql_user_db": renv["MYSQL_USER_DB"],
     "create_mysql_user": renv["CREATE_MYSQL_USER"] == "True",
     "mysql_admin_pass": renv["MYSQL_ADMIN_PASS"],
-    "mysql_user_pass": renv["MYSQL_USER_PASS"]
+    "mysql_user_pass": renv["MYSQL_USER_PASS"],
+    "php_upload_max_filesize": renv["PHP_UPLOAD_MAX_FILESIZE"],
 })
 agent.assert_exp(configure_retval['exit_code'] == 0, "The configure-module subtask failed!")

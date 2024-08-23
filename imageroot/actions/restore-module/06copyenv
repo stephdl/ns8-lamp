@@ -22,6 +22,7 @@ for evar in [
         "CREATE_MYSQL_USER",
         "MYSQL_ADMIN_PASS",
         "MYSQL_USER_PASS",
+        "PHP_UPLOAD_MAX_FILESIZE"
     ]:
     agent.set_env(evar, original_environment[evar])
 

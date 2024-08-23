@@ -16,6 +16,7 @@ EnvironmentFile=-%S/state/smarthost.env
 WorkingDirectory=%S/state
 Restart=always
 TimeoutStopSec=70
+ExecStartPre=/bin/mkdir -vp initdb.d
 ExecStartPre=/bin/rm -f %t/lamp-app.pid %t/lamp-app.ctr-id
 ExecStartPre=-runagent discover-smarthost
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/lamp-app.pid \
@@ -23,6 +24,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/lamp-app.pid \
     --pod-id-file %t/lamp.pod-id --replace -d --name  lamp-app \
     --volume mysql:/var/lib/mysql:Z \
     --volume app:/app:Z \
+    --volume ./initdb.d:initdb.d:Z \
     --env CREATE_MYSQL_USER=${CREATE_MYSQL_USER} \
     --env MYSQL_USER_NAME=${MYSQL_USER_NAME} \
     --env MYSQL_USER_DB=${MYSQL_USER_DB} \
