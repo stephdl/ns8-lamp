@@ -53,7 +53,7 @@ if [ -n "$APACHE_ROOT" ];then
 fi
 
 echo "Editing phpmyadmin config"
-sed -i "s/cfg\['blowfish_secret'\] = ''/cfg['blowfish_secret'] = '`date | md5sum`'/" /var/www/phpmyadmin/config.inc.php
+sed -i "s/cfg\['blowfish_secret'\] = ''/cfg['blowfish_secret'] = '`openssl rand -hex 16`'/" /var/www/phpmyadmin/config.inc.php
 
 echo "Setting up MySQL directories"
 mkdir -p /var/run/mysqld
