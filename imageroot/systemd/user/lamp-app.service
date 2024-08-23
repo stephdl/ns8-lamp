@@ -28,6 +28,8 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/lamp-app.pid \
     --env MYSQL_USER_DB=${MYSQL_USER_DB} \
     --env MYSQL_USER_PASS=${MYSQL_USER_PASS} \
     --env MYSQL_ADMIN_PASS=${MYSQL_ADMIN_PASS} \
+    --env PHP_POST_MAX_SIZE=${PHP_UPLOAD_MAX_FILESIZE} \
+    --env PHP_UPLOAD_MAX_FILESIZE=${PHP_UPLOAD_MAX_FILESIZE} \
     ${LAMP_SERVER_IMAGE}
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/lamp-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP lamp-app
