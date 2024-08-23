@@ -22,7 +22,7 @@ mysql -uroot -e "CREATE USER 'version_user'@'localhost' IDENTIFIED BY 'version_p
 mysql -uroot -e "GRANT SELECT ON mysql.version TO 'version_user'@'localhost'"
 
 # Create a new database and for phpmyadmin
-mysql < /var/www/phpMyAdmin-*/sql/create_tables.sql
+mysql -uroot < /var/www/phpMyAdmin-*/sql/create_tables.sql
 
 CREATE_MYSQL_USER=false
 
