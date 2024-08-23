@@ -16,9 +16,9 @@ EnvironmentFile=-%S/state/smarthost.env
 WorkingDirectory=%S/state
 Restart=always
 TimeoutStopSec=70
-ExecStartPre=/bin/mkdir -vp initdb.d
 ExecStartPre=/bin/rm -f %t/lamp-app.pid %t/lamp-app.ctr-id
 ExecStartPre=-runagent discover-smarthost
+ExecStartPre=/bin/mkdir -vp initdb.d
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/lamp-app.pid \
     --cidfile %t/lamp-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/lamp.pod-id --replace -d --name  lamp-app \
