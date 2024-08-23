@@ -11,7 +11,7 @@ done
 
 if [[ -f "/initdb.d/lamp.sql" ]]; then
     echo "=> Found lamp.sql, restoring database"
-    mysql -uroot < initdb.d/lamp.sql
+    mysql -uroot < /initdb.d/lamp.sql
     if [[ $? -eq 0 ]]; then
         echo "=> lamp.sql successfully imported."
         rm -rf /initdb.d/lamp.sql
