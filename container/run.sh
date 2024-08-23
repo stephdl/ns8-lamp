@@ -20,7 +20,9 @@ function replace_apache_php_ini_values () {
     echo "Updating for PHP $1"
 
     sed -ri -e "s/^upload_max_filesize.*/upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}/" \
-        -e "s/^post_max_size.*/post_max_size = ${PHP_POST_MAX_SIZE}/" /etc/php/$1/apache2/php.ini
+        -e "s/^post_max_size.*/post_max_size = ${PHP_POST_MAX_SIZE}/" /etc/php/$1/apache2/php.ini \
+        -e "s/^memory_limit.*/memory_limit = ${PHP_MEMORY_LIMIT}/" /etc/php/$1/apache2/php.ini
+        -e "s/^max_execution_time.*/max_execution_time = ${PHP_MAX_EXECUTION_TIME}/" /etc/php/$1/apache2/php.ini
 
     sed -i "s/;date.timezone =/date.timezone = Europe\/London/g" /etc/php/$1/apache2/php.ini
 
@@ -38,7 +40,7 @@ if [ -e /etc/php/$PHP_VERSION/apache2/php.ini ]; then replace_apache_php_ini_val
 #######################################
 function replace_cli_php_ini_values () {
     echo "Replacing CLI php.ini values"
-    sed -i  "s/;date.timezone =/date.timezone = Europe\/London/g" /etc/php/$1/cli/php.ini
+    sed -i  "s/;date.timezone =/date.timezone = UTC/g" /etc/php/$1/cli/php.ini
 }
 if [ -e /etc/php/$PHP_VERSION/cli/php.ini ]; then replace_cli_php_ini_values $PHP_VERSION; fi
 
