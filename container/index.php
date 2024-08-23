@@ -1,5 +1,5 @@
 <?php
-$db = new PDO('mysql:host=localhost', 'root', null);
+$db = new PDO('mysql:host=localhost', 'lam', null);
 
 function getOSInformation()
  {

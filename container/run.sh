@@ -97,7 +97,7 @@ if [[ ! -d $VOLUME_HOME/mysql ]]; then
     echo "=> Installing MySQL ..."
 
     # Try the 'preferred' solution
-    mariadb-install-db --user=root --auth-root-authentication-method=normal --skip-test-db 
+    mariadb-install-db --user=root --auth-root-authentication-method=socket --skip-test-db 
     if [ $? -ne 0 ]; then
         # Fall back to the 'depreciated' solution
         mysql_install_db > /dev/null 2>&1
