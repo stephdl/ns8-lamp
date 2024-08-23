@@ -31,6 +31,6 @@ config["mysql_admin_pass"] = agent.read_envfile("password.env")["MYSQL_ADMIN_PAS
 config["mysql_user_pass"] = agent.read_envfile("password.env")["MYSQL_USER_PASS"] if os.path.exists("password.env") else "Nethesis,1234"
 
 config["create_mysql_user"] = os.getenv("CREATE_MYSQL_USER","False") == "True"
-
+config["php_upload_max_filesize"] = os.getenv("PHP_UPLOAD_MAX_FILESIZE","100")
 # Dump the configuration to stdout
 json.dump(config, fp=sys.stdout)

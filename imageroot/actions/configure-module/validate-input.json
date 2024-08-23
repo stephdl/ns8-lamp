@@ -11,7 +11,9 @@
       "mysql_user_name": "user",
       "mysql_user_pass": "password",
       "mysql_admin_pass": "password",
-      "mysql_user_db": "database"
+      "mysql_user_db": "database",
+      "create_mysql_user": true,
+      "php_upload_max_filesize": "100M"
     }
   ],
   "type": "object",
@@ -23,7 +25,8 @@
     "mysql_user_pass",
     "mysql_admin_pass",
     "mysql_user_db",
-    "create_mysql_user"
+    "create_mysql_user",
+    "php_upload_max_filesize"
   ],
   "properties": {
     "host": {
@@ -66,6 +69,11 @@
       "type": "boolean",
       "title": "Create MySQL user",
       "description": "Create a MySQL user with the provided credentials"
+    },
+    "php_upload_max_filesize": {
+      "type": "string",
+      "title": "PHP upload max filesize",
+      "description": "Maximum size of uploaded files"
     }
   }
 }

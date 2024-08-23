@@ -20,3 +20,5 @@ password = {"MYSQL_ADMIN_PASS":data["mysql_admin_pass"],"MYSQL_USER_PASS": data.
 agent.write_envfile("password.env", password)
 
 agent.set_env("CREATE_MYSQL_USER", data.get("create_mysql_user",False))
+agent.set_env("PHP_UPLOAD_MAX_FILESIZE", data.get("php_upload_max_filesize",'100') + 'M')
+agent.set_env("PHP_POST_MAX_SIZE", data.get("php_upload_max_filesize",'100') + 'M')
