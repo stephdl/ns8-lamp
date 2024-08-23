@@ -12,7 +12,7 @@ VOLUME_HOME="/var/lib/mysql"
 #   PHP_POST_MAX_SIZE
 #   PHP_TIMEZONE
 # Arguments:
-#   $1 - PHP version i.e. 5.6, 7.3 etc.
+#   $1 - PHP version i.e. 8.3 etc.
 # Returns:
 #   None
 #######################################
@@ -25,7 +25,6 @@ function replace_apache_php_ini_values () {
     sed -i "s/;date.timezone =/date.timezone = Europe\/London/g" /etc/php/$1/apache2/php.ini
 
 }
-if [ -e /etc/php/5.6/apache2/php.ini ]; then replace_apache_php_ini_values "5.6"; fi
 if [ -e /etc/php/$PHP_VERSION/apache2/php.ini ]; then replace_apache_php_ini_values $PHP_VERSION; fi
 
 #######################################
@@ -33,7 +32,7 @@ if [ -e /etc/php/$PHP_VERSION/apache2/php.ini ]; then replace_apache_php_ini_val
 # Globals:
 #   PHP_TIMEZONE
 # Arguments:
-#   $1 - PHP version i.e. 5.6, 7.3 etc.
+#   $1 - PHP version i.e. 8.3 etc.
 # Returns:
 #   None
 #######################################
@@ -41,7 +40,6 @@ function replace_cli_php_ini_values () {
     echo "Replacing CLI php.ini values"
     sed -i  "s/;date.timezone =/date.timezone = Europe\/London/g" /etc/php/$1/cli/php.ini
 }
-if [ -e /etc/php/5.6/cli/php.ini ]; then replace_cli_php_ini_values "5.6"; fi
 if [ -e /etc/php/$PHP_VERSION/cli/php.ini ]; then replace_cli_php_ini_values $PHP_VERSION; fi
 
 echo "Editing APACHE_RUN_GROUP environment variable"
