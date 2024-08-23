@@ -51,6 +51,9 @@ if [ -n "$APACHE_ROOT" ];then
     echo "Linking /var/www/html to the Apache root"
     rm -f /var/www/html && ln -s "/app/${APACHE_ROOT}" /var/www/html
 fi
+# log apache to stderr
+ln -sf /dev/stderr /var/log/apache2/access.log
+ln -sf /dev/stderr /var/log/apache2/error.log
 
 echo "Editing phpmyadmin config"
 sed -i "s/cfg\['blowfish_secret'\] = ''/cfg['blowfish_secret'] = '`openssl rand -hex 16`'/" /var/www/phpmyadmin/config.inc.php
@@ -77,7 +80,7 @@ fi
 echo "Allowing Apache/PHP to write to MySQL"
 chown -R www-data:staff /var/lib/mysql
 chown -R www-data:staff /var/run/mysqld
-chown -R www-data:staff /var/log/mysql
+# chown -R www-data:staff /var/log/mysql
 
 # Listen only on IPv4 addresses
 sed -i 's/^Listen .*/Listen 0.0.0.0:80/' /etc/apache2/ports.conf
