@@ -16,8 +16,14 @@ echo "=> Creating MySQL admin user with password"
 mysql -uroot -e "CREATE USER 'admin'@'%' IDENTIFIED BY '$PASS'"
 mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION"
 mysql -uroot -e "CREATE DATABASE IF NOT EXISTS phpmyadmin"
-mysql -uroot -e "CREATE USER 'pma'@'localhost' IDENTIFIED BY ''"
-mysql -uroot -e " GRANT ALL PRIVILEGES ON phpmyadmin.* TO  'pma'@'localhost'"
+# mysql -uroot -e "CREATE USER 'pma'@'localhost' IDENTIFIED BY ''"
+# mysql -uroot -e " GRANT ALL PRIVILEGES ON phpmyadmin.* TO  'pma'@'localhost'"
+mysql -uroot -e "CREATE USER 'version_user'@'localhost' IDENTIFIED BY 'version_password'";
+mysql -uroot -e "GRANT SELECT ON mysql.version TO 'version_user'@'localhost'"
+
+# Create a new database and for phpmyadmin
+mysql < /var/www/phpMyAdmin-*/sql/create_tables.sql
+
 CREATE_MYSQL_USER=false
 
 if [ -n "$CREATE_MYSQL_BASIC_USER_AND_DB" ] || \
