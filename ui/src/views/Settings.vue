@@ -64,6 +64,7 @@
             <NsTextInput
               :label="$t('settings.mysql_admin_pass')"
               v-model="mysql_admin_pass"
+              type="password"
               :placeholder="$t('settings.mysql_admin_pass')"
               :disabled="
                 loading.getConfiguration ||
@@ -123,6 +124,7 @@
                       :label="$t('settings.mysql_user_pass')"
                       v-model="mysql_user_pass"
                       :placeholder="$t('settings.mysql_user_pass')"
+                      type="password"
                       :disabled="
                         loading.getConfiguration ||
                         loading.configureModule ||
