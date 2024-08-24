@@ -12,5 +12,11 @@ configure_retval = agent.tasks.run(agent_id=os.environ['AGENT_ID'], action='conf
     "lets_encrypt": os.environ["TRAEFIK_LETS_ENCRYPT"] == "True",
     "host": os.environ["TRAEFIK_HOST"],
     "http2https": os.environ["TRAEFIK_HTTP2HTTPS"] == "True",
+    "mysql_user_name": os.environ["MYSQL_USER_NAME"],
+    "mysql_user_db": os.environ["MYSQL_USER_DB"],
+    "create_mysql_user": os.environ["CREATE_MYSQL_USER"] == "True",
+    "mysql_admin_pass": agent.read_envfile("password.env")["MYSQL_ADMIN_PASS"],
+    "mysql_user_pass": agent.read_envfile("password.env")["MYSQL_USER_PASS"],
+    "php_upload_max_filesize": os.environ["PHP_UPLOAD_MAX_FILESIZE"].removesuffix('M'),
 })
 agent.assert_exp(configure_retval['exit_code'] == 0, "The configure-module subtask failed!")

@@ -61,11 +61,118 @@
                 $t("settings.enabled")
               }}</template>
             </cv-toggle>
-              <!-- advanced options -->
+            <NsTextInput
+              :label="$t('settings.mysql_admin_pass')"
+              v-model="mysql_admin_pass"
+              type="password"
+              :placeholder="$t('settings.mysql_admin_pass_placeholder')"
+              :disabled="
+                loading.getConfiguration ||
+                loading.configureModule ||
+                !firstConfig
+              "
+              :invalid-message="$t(error.mysql_admin_pass)"
+              ref="mysql_admin_pass"
+              :helper-text="$t('settings.mysql_admin_pass_helper')"
+            >
+              <template #tooltip>{{
+                $t("settings.mysql_admin_pass_tooltip")
+              }}</template>
+            </NsTextInput>
+            <!-- advanced options -->
             <cv-accordion ref="accordion" class="maxwidth mg-bottom">
               <cv-accordion-item :open="toggleAccordion[0]">
                 <template slot="title">{{ $t("settings.advanced") }}</template>
                 <template slot="content">
+                  <cv-toggle
+                    value="create_mysql_user"
+                    :label="$t('settings.create_mysql_user')"
+                    v-model="create_mysql_user"
+                    :disabled="
+                      loading.getConfiguration ||
+                      loading.configureModule ||
+                      !firstConfig
+                    "
+                    class="mg-bottom"
+                  >
+                    <template slot="text-left">{{
+                      $t("settings.disabled")
+                    }}</template>
+                    <template slot="text-right">{{
+                      $t("settings.enabled")
+                    }}</template>
+                  </cv-toggle>
+                  <template v-if="create_mysql_user">
+                    <NsTextInput
+                      :label="$t('settings.mysql_user_name')"
+                      v-model="mysql_user_name"
+                      :placeholder="$t('settings.mysql_user_name_placeholder')"
+                      :disabled="
+                        loading.getConfiguration ||
+                        loading.configureModule ||
+                        !firstConfig
+                      "
+                      :invalid-message="$t(error.mysql_user_name)"
+                      ref="mysql_user_name"
+                      :helper-text="$t('settings.mysql_user_name_helper')"
+                    >
+                      <template #tooltip>{{
+                        $t("settings.mysql_user_name_tooltip")
+                      }}</template>
+                    </NsTextInput>
+                    <NsTextInput
+                      :label="$t('settings.mysql_user_pass')"
+                      v-model="mysql_user_pass"
+                      :placeholder="$t('settings.mysql_user_pass_placeholder')"
+                      type="password"
+                      :disabled="
+                        loading.getConfiguration ||
+                        loading.configureModule ||
+                        !firstConfig
+                      "
+                      :invalid-message="$t(error.mysql_user_pass)"
+                      ref="mysql_user_pass"
+                      :helper-text="$t('settings.mysql_user_pass_helper')"
+                    >
+                      <template #tooltip>{{
+                        $t("settings.mysql_user_pass_tooltip")
+                      }}</template>
+                    </NsTextInput>
+                    <NsTextInput
+                      :label="$t('settings.mysql_user_db')"
+                      v-model="mysql_user_db"
+                      :placeholder="$t('settings.mysql_user_db_placeholder')"
+                      :disabled="
+                        loading.getConfiguration ||
+                        loading.configureModule ||
+                        !firstConfig
+                      "
+                      :invalid-message="$t(error.mysql_user_db)"
+                      ref="mysql_user_db"
+                      :helper-text="$t('settings.mysql_user_db_helper')"
+                    >
+                      <template #tooltip>{{
+                        $t("settings.mysql_user_db_tooltip")
+                      }}</template>
+                    </NsTextInput>
+                  </template>
+                  <NsTextInput
+                    :label="$t('settings.php_upload_max_filesize')"
+                    v-model="php_upload_max_filesize"
+                    type="number"
+                    :placeholder="$t('settings.php_upload_max_filesize_placeholder')"
+                    :disabled="
+                      loading.getConfiguration ||
+                      loading.configureModule
+                    "
+                    :invalid-message="$t(error.php_upload_max_filesize)"
+                    ref="php_upload_max_filesize"
+                    :helper-text="$t('settings.php_upload_max_filesize_helper')"
+                  >
+                    <template #tooltip>{{
+                      $t("settings.php_upload_max_filesize_tooltip")
+                    }}</template>
+                  </NsTextInput>
                 </template>
               </cv-accordion-item>
             </cv-accordion>
@@ -125,6 +232,13 @@ export default {
       host: "",
       isLetsEncryptEnabled: false,
       isHttpToHttpsEnabled: true,
+      create_mysql_user: false,
+      php_upload_max_filesize: "100",
+      mysql_user_name: "",
+      mysql_user_db: "",
+      mysql_user_pass: "",
+      mysql_admin_pass: "",
+      firstConfig: true,
       loading: {
         getConfiguration: false,
         configureModule: false,
@@ -135,6 +249,11 @@ export default {
         host: "",
         lets_encrypt: "",
         http2https: "",
+        mysql_user_name: "",
+        mysql_user_db: "",
+        mysql_user_pass: "",
+        mysql_admin_pass: "",
+        php_upload_max_filesize: "",
       },
     };
   },
@@ -202,8 +321,14 @@ export default {
       this.host = config.host;
       this.isLetsEncryptEnabled = config.lets_encrypt;
       this.isHttpToHttpsEnabled = config.http2https;
-
+      this.mysql_user_name = config.mysql_user_name;
+      this.mysql_user_db = config.mysql_user_db;
+      this.mysql_user_pass = config.mysql_user_pass;
+      this.mysql_admin_pass = config.mysql_admin_pass;
+      this.firstConfig = config.firstConfig;
       this.loading.getConfiguration = false;
+      this.create_mysql_user = config.create_mysql_user;
+      this.php_upload_max_filesize = config.php_upload_max_filesize;
       this.focusElement("host");
     },
     validateConfigureModule() {
@@ -215,6 +340,54 @@ export default {
 
         if (isValidationOk) {
           this.focusElement("host");
+        }
+        isValidationOk = false;
+      }
+      if (!this.mysql_admin_pass) {
+        this.error.mysql_admin_pass = "common.required";
+
+        if (isValidationOk) {
+          this.focusElement("mysql_admin_pass");
+        }
+        isValidationOk = false;
+      }
+      if (this.mysql_admin_pass && this.mysql_admin_pass.length < 8) {
+        this.error.mysql_admin_pass = "common.required_min_length8";
+
+        if (isValidationOk) {
+          this.focusElement("mysql_admin_pass");
+        }
+        isValidationOk = false;
+      }
+      if (this.create_mysql_user && !this.mysql_user_name) {
+        this.error.mysql_user_name = "common.required";
+
+        if (isValidationOk) {
+          this.focusElement("mysql_user_name");
+        }
+        isValidationOk = false;
+      }
+      if (this.create_mysql_user && !this.mysql_user_pass) {
+        this.error.mysql_user_pass = "common.required";
+
+        if (isValidationOk) {
+          this.focusElement("mysql_user_pass");
+        }
+        isValidationOk = false;
+      }
+      if (this.create_mysql_user && this.mysql_user_pass.length < 8) {
+        this.error.mysql_user_pass = "common.required_min_length8";
+
+        if (isValidationOk) {
+          this.focusElement("mysql_user_pass");
+        }
+        isValidationOk = false;
+      }
+      if (this.create_mysql_user && !this.mysql_user_db) {
+        this.error.mysql_user_db = "common.required";
+
+        if (isValidationOk) {
+          this.focusElement("mysql_user_db");
         }
         isValidationOk = false;
       }
@@ -271,6 +444,12 @@ export default {
             host: this.host,
             lets_encrypt: this.isLetsEncryptEnabled,
             http2https: this.isHttpToHttpsEnabled,
+            mysql_user_name: this.mysql_user_name,
+            mysql_user_db: this.mysql_user_db,
+            mysql_user_pass: this.mysql_user_pass,
+            mysql_admin_pass: this.mysql_admin_pass,
+            create_mysql_user: this.create_mysql_user,
+            php_upload_max_filesize: this.php_upload_max_filesize,
           },
           extra: {
             title: this.$t("settings.instance_configuration", {

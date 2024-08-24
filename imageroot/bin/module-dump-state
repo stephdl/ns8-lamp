@@ -11,8 +11,8 @@ if ! systemctl --user -q is-active lamp.service; then
     exit 0
 fi
 
-podman exec mariadb-app mysqldump \
-        --databases lamp \
+podman exec lamp-app mysqldump \
+        --all-databases \
         --default-character-set=utf8mb4 \
         --skip-dump-date \
         --ignore-table=mysql.event \

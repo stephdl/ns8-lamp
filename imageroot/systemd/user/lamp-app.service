@@ -6,31 +6,33 @@
 [Unit]
 Description=Podman  lamp-app.service
 BindsTo=lamp.service
-After=lamp.service mariadb-app.service
+After=lamp.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
 EnvironmentFile=%S/state/environment
+EnvironmentFile=%S/state/password.env
 EnvironmentFile=-%S/state/smarthost.env
 WorkingDirectory=%S/state
 Restart=always
 TimeoutStopSec=70
-ExecStartPre=/bin/mkdir -p tmp
 ExecStartPre=/bin/rm -f %t/lamp-app.pid %t/lamp-app.ctr-id
 ExecStartPre=-runagent discover-smarthost
+ExecStartPre=/bin/mkdir -vp initdb.d
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/lamp-app.pid \
     --cidfile %t/lamp-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/lamp.pod-id --replace -d --name  lamp-app \
-    --volume lamp-app:/var/www/html/:Z \
-    --volume ./tmp:/tmp:Z \
-    --env=MARIADB_* \
-    --env MARIADB_DB_TYPE=mysql \
-    --env MARIADB_DB_HOST=127.0.0.1 \
-    --env MARIADB_DB_PORT=3306 \
-    --env MARIADB_DB_USER=lamp \
-    --env MARIADB_DB_PASSWORD=lamp \
-    --env MARIADB_DB_NAME=lamp \
-    ${NGINX_IMAGE}
+    --volume mysql:/var/lib/mysql:Z \
+    --volume app:/app:Z \
+    --volume ./initdb.d:/initdb.d:Z \
+    --env CREATE_MYSQL_USER=${CREATE_MYSQL_USER} \
+    --env MYSQL_USER_NAME=${MYSQL_USER_NAME} \
+    --env MYSQL_USER_DB=${MYSQL_USER_DB} \
+    --env MYSQL_USER_PASS=${MYSQL_USER_PASS} \
+    --env MYSQL_ADMIN_PASS=${MYSQL_ADMIN_PASS} \
+    --env PHP_POST_MAX_SIZE=${PHP_UPLOAD_MAX_FILESIZE} \
+    --env PHP_UPLOAD_MAX_FILESIZE=${PHP_UPLOAD_MAX_FILESIZE} \
+    ${LAMP_SERVER_IMAGE}
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/lamp-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP lamp-app
 SyslogIdentifier=%u

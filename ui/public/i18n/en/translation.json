@@ -2,7 +2,8 @@
   "common": {
     "required": "Required",
     "work_in_progress": "Work in progress",
-    "processing": "Processing..."
+    "processing": "Processing...",
+    "required_min_length8": "Required and must be at least 8 characters"
   },
   "status": {
     "title": "Status",
@@ -22,7 +23,10 @@
     "lamp_webapp": "lamp webapp",
     "not_configured": "Not configured",
     "open_webapp": "Open lamp",
-    "configure": "Configure"
+    "configure": "Configure",
+    "open_phpmyadmin": "Open phpMyAdmin",
+    "configure_mysql_database": "Configure MySQL database",
+    "lamp_phpmyadmin": "lamp phpMyAdmin"
   },
   "settings": {
     "title": "Settings",
@@ -38,7 +42,31 @@
     "instance_configuration": "Configure lamp",
     "domain_already_used_in_traefik": "Domain already used in traefik",
     "host_pattern": "Must be a valid fully qualified domain name",
-    "host_format": "Must be a valid fully qualified domain name"
+    "host_format": "Must be a valid fully qualified domain name",
+    "mysql_admin_pass": "MySQL admin password",
+    "mysql_admin_pass_placeholder": "Enter MySQL admin password",
+    "mysql_admin_pass_tooltip": "MySQL password for the admin user of the MySQL databases",
+    "mysql_admin_pass_helper": "This password cannot be changed from the UI once set",
+    "create_mysql_user": "Create MySQL user and database",
+    "php_upload_max_filesize": "PHP upload max filesize",
+    "php_upload_max_filesize_placeholder": "Enter PHP upload max filesize",
+    "php_upload_max_filesize_tooltip": "Maximum size of files that can be uploaded to the server",
+    "php_upload_max_filesize_helper": "This value is in MB",
+    "mysql_user_name": "MySQL user name",
+    "mysql_user_name_placeholder": "Enter MySQL user name",
+    "mysql_user_name_tooltip": "Name of the MySQL user to create",
+    "mysql_user_name_helper": "This user cannot be changed from the UI once set",
+    "mysql_user_pass": "MySQL user password",
+    "mysql_user_pass_placeholder": "Enter MySQL user password",
+    "mysql_user_pass_tooltip": "Password of the MySQL user to create",
+    "mysql_user_pass_helper": "This password cannot be changed from the UI once set",
+    "mysql_user_db": "MySQL database name",
+    "mysql_user_db_placeholder": "Enter MySQL database name",
+    "mysql_user_db_tooltip": "Name of the MySQL database to create",
+    "mysql_user_db_helper": "This database cannot be changed from the UI once set"
+
+
+
   },
   "about": {
     "title": "About"

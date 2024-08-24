@@ -17,6 +17,10 @@ for evar in [
         "TRAEFIK_HOST",
         "TRAEFIK_HTTP2HTTPS",
         "TRAEFIK_LETS_ENCRYPT",
+        "MYSQL_USER_NAME",
+        "MYSQL_USER_DB",
+        "CREATE_MYSQL_USER",
+        "PHP_UPLOAD_MAX_FILESIZE"
     ]:
     agent.set_env(evar, original_environment[evar])
 

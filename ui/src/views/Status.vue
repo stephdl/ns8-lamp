@@ -74,6 +74,32 @@
           </template>
         </NsInfoCard>
       </cv-column>
+      <template v-if="host">
+        <cv-column :md="4" :max="4">
+          <NsInfoCard
+            light
+            :title="$t('status.lamp_phpmyadmin')"
+            :description="$t('status.configure_mysql_database')"
+            :icon="Wikis32"
+            :loading="loading.getConfiguration"
+            :isErrorShown="error.getConfiguration"
+            :errorTitle="$t('error.cannot_retrieve_configuration')"
+            :errorDescription="error.getConfiguration"
+            class="min-height-card"
+          >
+            <template slot="content">
+              <NsButton
+                kind="ghost"
+                :icon="Launch20"
+                :disabled="loading.getConfiguration"
+                @click="goToWebphpmyadmin"
+              >
+                {{ $t("status.open_phpmyadmin") }}
+              </NsButton>
+            </template>
+          </NsInfoCard>
+        </cv-column>
+      </template>
       <cv-column :md="4" :max="4">
         <NsInfoCard
           light
@@ -386,6 +412,9 @@ export default {
   methods: {
     goToWebapp() {
       window.open(`https://${this.host}`, "_blank");
+    },
+    goToWebphpmyadmin() {
+      window.open(`https://${this.host}/phpmyadmin/`, "_blank");
     },
     async getConfiguration() {
       this.loading.getConfiguration = true;

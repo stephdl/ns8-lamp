@@ -2,6 +2,10 @@ name: "Publish images"
 
 on:
   push:
+    branches-ignore:
+      - 'renovate/**'
+    tags:
+      - "**"
 
 permissions:
   packages: write
@@ -10,3 +14,5 @@ jobs:
   publish-images:
     if: github.run_number > 1
     uses: NethServer/ns8-github-actions/.github/workflows/publish-branch.yml@v1
+    with:
+      runner-version: ubuntu-24.04
