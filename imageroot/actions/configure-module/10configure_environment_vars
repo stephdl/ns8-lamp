@@ -8,6 +8,7 @@
 import json
 import sys
 import agent
+import os
 
 # Try to parse the stdin as JSON.
 # If parsing fails, output everything to stderr
@@ -22,3 +23,6 @@ agent.write_envfile("password.env", password)
 agent.set_env("CREATE_MYSQL_USER", data.get("create_mysql_user",False))
 agent.set_env("PHP_UPLOAD_MAX_FILESIZE", data.get("php_upload_max_filesize",'100') + 'M')
 agent.set_env("PHP_POST_MAX_SIZE", data.get("php_upload_max_filesize",'100') + 'M')
+
+# Bind the new domain, overriding previous values (unbind)
+agent.bind_user_domains([os.environ.get('LAMP_LDAP_DOMAIN','')])
