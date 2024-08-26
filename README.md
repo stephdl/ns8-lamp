@@ -1,33 +1,7 @@
 # ns8-lamp
 
-This is a template module for [NethServer 8](https://github.com/NethServer/ns8-core).
-To start a new module from it:
 
-1. Click on [Use this template](https://github.com/NethServer/ns8-lamp/generate).
-   Name your repo with `ns8-` prefix (e.g. `ns8-mymodule`). 
-   Do not end your module name with a number, like ~~`ns8-baaad2`~~!
-
-1. Clone the repository, enter the cloned directory and
-   [configure your GIT identity](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup#_your_identity)
-
-1. Rename some references inside the repo:
-   ```
-   modulename=$(basename $(pwd) | sed 's/^ns8-//') &&
-   git mv imageroot/systemd/user/lamp.service imageroot/systemd/user/${modulename}.service &&
-   git mv imageroot/systemd/user/lamp-app.service imageroot/systemd/user/${modulename}-app.service && 
-   git mv tests/lamp.robot tests/${modulename}.robot &&
-   sed -i "s/lamp/${modulename}/g" $(find .github/ * -type f) &&
-   git commit -a -m "Repository initialization"
-   ```
-
-1. Edit this `README.md` file, by replacing this section with your module
-   description
-
-1. Adjust `.github/workflows` to your needs. `clean-registry.yml` might
-   need the proper list of image names to work correctly. Unused workflows
-   can be disabled from the GitHub Actions interface.
-
-1. Commit and push your local changes
+NS8-LAMP is a containerized environment that encapsulates the LAMP stack, which includes Linux (Ubuntu), Apache (web server), MariaDB (database), and PHP (scripting language). This container allows for easy deployment and management of web applications, providing consistency, portability, and isolation across different environments.
 
 ## Install
 
@@ -48,6 +22,12 @@ Launch `configure-module`, by setting the following parameters:
 - `host`: a fully qualified domain name for the application
 - `http2https`: enable or disable HTTP to HTTPS redirection (true/false)
 - `lets_encrypt`: enable or disable Let's Encrypt certificate (true/false)
+- `create_mysql_user`: create database and mysqluser (true/false)
+- `mysql_admin_pass`: password of the mysql admin user of all databases
+- `mysql_user_db`: database of the mysql user
+- `mysql_user_name`: name of the mysql user
+-  `mysql_user_pass`: password of the mysql user
+-  `php_upload_max_filesize`: maximum file size and maximum post size in MB
 
 
 Example:
@@ -55,9 +35,15 @@ Example:
 ```
 api-cli run configure-module --agent module/lamp1 --data - <<EOF
 {
-  "host": "lamp.domain.com",
-  "http2https": true,
-  "lets_encrypt": false
+    "create_mysql_user": true,
+    "host": "lamp1.rocky9-pve.org",
+    "http2https": false,
+    "lets_encrypt": false,
+    "mysql_admin_pass": "Nethesis,1234",
+    "mysql_user_db": "foo",
+    "mysql_user_name": "foo",
+    "mysql_user_pass": "Nethesis,1234",
+    "php_upload_max_filesize": "100"
 }
 EOF
 ```
