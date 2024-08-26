@@ -61,10 +61,13 @@ sed -i "s/cfg\['blowfish_secret'\] = ''/cfg['blowfish_secret'] = '`openssl rand 
 
 echo "Setting up MySQL directories"
 mkdir -p /var/run/mysqld
+mkdir -p /var/log/mysql
 
 # Setup user and permissions for MySQL and Apache
 chmod -R 770 /var/lib/mysql
 chmod -R 770 /var/run/mysqld
+chmod -R 770 /var/log/mysql
+touch /var/log/mysql/error.log
 
 if [ -n "$VAGRANT_OSX_MODE" ];then
     echo "Setting up users and groups"
@@ -95,6 +98,12 @@ echo "Editing MySQL config"
 sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
 sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf
 sed -i "s/user.*/user = www-data/" /etc/mysql/mariadb.conf.d/50-server.cnf
+sed -i "s|#log_error = /var/log/mysql/error.log|log_error = /var/log/mysql/error.log|" /etc/mysql/mariadb.conf.d/50-server.cnf
+sed -i "s/skip_log_error/#skip_log_error/" /etc/mysql/mariadb.conf.d/50-mysqld_safe.cnf
+sed -i "s/syslog/#syslog/" /etc/mysql/mariadb.conf.d/50-mysqld_safe.cnf
+
+# log mysql to stderr
+ln -sf /dev/stderr /var/log/mysql/error.log
 
 if [[ ! -d $VOLUME_HOME/mysql ]]; then
     echo "=> An empty or uninitialized MySQL volume is detected in $VOLUME_HOME"
