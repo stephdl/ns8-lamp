@@ -16,6 +16,10 @@ Once inside the container, navigate to the /app directory:
 
 From here, you can download your web application files using one of the following methods:
 
+- git:
+
+    `git clone http://github.com/url/of/project`
+
 - wget:
   
     `wget http://your-url`
