@@ -26,6 +26,7 @@ function replace_apache_php_ini_values () {
 
     sed -i "s/;date.timezone =/date.timezone = Europe\/London/g" /etc/php/$1/apache2/php.ini
     sed -i "s/;user_ini.filename = \".user.ini\"/user_ini.filename = \".user.ini\"/g" /etc/php/$1/apache2/php.ini
+    sed -i "s|;sendmail_path =|sendmail_path = /usr/sbin/ssmtp -t|" /etc/php/$1/apache2/php.ini
 
 }
 if [ -e /etc/php/$PHP_VERSION/apache2/php.ini ]; then replace_apache_php_ini_values $PHP_VERSION; fi
@@ -44,6 +45,40 @@ function replace_cli_php_ini_values () {
     sed -i  "s/;date.timezone =/date.timezone = UTC/g" /etc/php/$1/cli/php.ini
 }
 if [ -e /etc/php/$PHP_VERSION/cli/php.ini ]; then replace_cli_php_ini_values $PHP_VERSION; fi
+
+
+# writing ssmtp.conf
+# Check if SMTP is enabled
+
+SSMTP_CONF="/etc/ssmtp/ssmtp.conf"
+if [[ "$SMTP_ENABLED" != "1" ]]; then
+    echo "SMTP is not enabled. Exiting."
+else
+    # Create or overwrite the ssmtp.conf file
+    {
+        echo "mailhub=${SMTP_HOST}:${SMTP_PORT}"
+        echo "AuthUser=${SMTP_USERNAME}"
+        echo "AuthPass=${SMTP_PASSWORD}"
+
+        # Configure encryption based on the SMTP_ENCRYPTION setting
+        if [[ "$SMTP_ENCRYPTION" == "starttls" ]]; then
+            echo "UseSTARTTLS=YES"
+        elif [[ "$SMTP_ENCRYPTION" == "tls" ]]; then
+            echo "UseTLS=YES"
+        fi
+
+        # Optional TLS certificate verification
+        if [[ "$SMTP_TLSVERIFY" == "1" ]]; then
+            echo "TLS_CA_File=/etc/ssl/certs/ca-certificates.crt"
+            echo "TLS_CA_Dir=/etc/ssl/certs"
+        fi
+
+        # echo "hostname=$(hostname)"
+        echo "FromLineOverride=YES"
+    } > /etc/ssmtp/ssmtp.conf
+
+    echo "ssmtp.conf has been configured."
+fi
 
 echo "Editing APACHE_RUN_GROUP environment variable"
 sed -i "s/export APACHE_RUN_GROUP=www-data/export APACHE_RUN_GROUP=staff/" /etc/apache2/envvars
@@ -69,17 +104,12 @@ chmod -R 770 /var/run/mysqld
 chmod -R 770 /var/log/mysql
 touch /var/log/mysql/error.log
 
-if [ -n "$VAGRANT_OSX_MODE" ];then
-    echo "Setting up users and groups"
-    usermod -u $DOCKER_USER_ID www-data
-    groupmod -g $(($DOCKER_USER_GID + 10000)) $(getent group $DOCKER_USER_GID | cut -d: -f1)
-    groupmod -g ${DOCKER_USER_GID} staff
-else
-    echo "Allowing Apache/PHP to write to the app"
-    # Tweaks to give Apache/PHP write permissions to the app
-    chown -R www-data:staff /var/www
-    chown -R www-data:staff /app
-fi
+
+echo "Allowing Apache/PHP to write to the app"
+# Tweaks to give Apache/PHP write permissions to the app
+chown -R www-data:staff /var/www
+chown -R www-data:staff /app
+
 
 echo "Allowing Apache/PHP to write to MySQL"
 chown -R www-data:staff /var/lib/mysql

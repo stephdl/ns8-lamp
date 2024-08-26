@@ -129,6 +129,34 @@ See also the `systemd/user/lamp.service` file.
 This setting discovery is just an example to understand how the module is
 expected to work: it can be rewritten or discarded completely.
 
+
+We use ssmtp to handle sending emails from our server. The php.ini configuration is set to use the ssmtp -t command, allowing PHP to send emails seamlessly via ssmtp.
+For other programming languages, ensure that they are configured to use the ssmtp command similarly, typically by setting their mail sending command or path to `ssmtp -t`,
+just like in PHP. This way, all emails sent by different applications or scripts will be routed through ssmtp.
+
+
+
+you can try by the command line to send an email with a php script
+
+```
+<?php
+$to = 'recipient@example.com';
+$subject = 'Test Email';
+$message = 'This is a test email sent from PHP using ssmtp.';
+$headers = 'From: your-email@example.com' . "\r\n" .
+           'Reply-To: your-email@example.com' . "\r\n" .
+           'X-Mailer: PHP/' . phpversion();
+
+if(mail($to, $subject, $message, $headers)) {
+    echo 'Email sent successfully!';
+} else {
+    echo 'Failed to send email.';
+}
+?>
+```
+
+execute it by : `php /path/2/script`
+
 ## Debug
 
 some CLI are needed to debug
