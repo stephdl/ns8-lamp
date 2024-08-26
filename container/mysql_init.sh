@@ -15,6 +15,7 @@ if [[ -f "/initdb.d/lamp.sql" ]]; then
     if [[ $? -eq 0 ]]; then
         echo "=> lamp.sql successfully imported."
         rm -rf /initdb.d/lamp.sql
+        mysqladmin -uroot shutdown
     else
         echo "=> lamp.sql import failed."
         exit 1
