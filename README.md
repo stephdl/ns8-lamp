@@ -3,6 +3,47 @@
 
 NS8-LAMP is a containerized environment that encapsulates the LAMP stack, which includes Linux (Ubuntu), Apache (web server), MariaDB (database), and PHP (scripting language). This container allows for easy deployment and management of web applications, providing consistency, portability, and isolation across different environments.
 
+## Usage
+
+Use the /app directory as the storage location for your web application. You can access it by running the following command:
+
+
+    runagent -m lamp1 podman exec -ti lamp-app bash
+
+Once inside the container, navigate to the /app directory:
+
+`cd /app`
+
+From here, you can download your web application files using one of the following methods:
+
+- wget:
+  
+    `wget http://your-url`
+  
+- rsync:
+
+    `rsync user@hostname:/path .`
+  
+- sftp:
+  
+    `sftp user@hostname`
+  
+- ftp:
+  
+    `ftp hostname`
+  
+- ftp-ssl:
+  
+    `ftp-ssl hostname`
+
+Once your application files are in the /app directory, you can associate them with the Fully Qualified Domain Name (FQDN) set in the user interface.
+
+You can also access phpMyAdmin by navigating to:
+
+    https://FQDN/phpmyadmin
+
+The username is admin, and the password is the one you set in the user interface.
+
 ## Install
 
 Instantiate the module with:
