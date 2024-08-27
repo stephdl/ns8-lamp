@@ -53,17 +53,29 @@ The username is admin, and the password is the one you set in the user interface
 go to the container once you have saved the FQDN where the container is running, in you your browser go to  `https://FQDN` or `https://FQDN/phpmyadmin/`, a page must be displayed with software version and another with phpmyadmin
 
 - go into the container
+
 `runagent -m lamp1 podman exec -ti lamp-app bash`
+
 - go to the web folder
+  
 `cd /app`
+
 - download wordpress
+  
 `wget https://fr.wordpress.org/latest-fr_FR.zip`
+
 - unzip the archive
+  
 `unzip latest-fr_FR.zip`
+
 - move web files to the root of the web folder
-`mv wordpress/* .`
-`mv wordpress/.* .`
+```
+mv wordpress/* .
+mv wordpress/.* .
+```
 - go to the `https://FQDN` and finish the installation with the webfolder, you will need the credentials of a mysql user and its associated database name (either created the first time in the user interface or fwith phpmyadmin)
+  
+![Capture d’écran du 2024-08-27 15-42-22](https://github.com/user-attachments/assets/2f57fe3d-a144-4506-9e4e-9668560e7060)
 
 ## Install
 
