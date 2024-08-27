@@ -40,9 +40,7 @@ else
     echo "Create a new database for phpmyadmin"
     mysql -uroot < /var/www/phpMyAdmin-*/sql/create_tables.sql
 
-    CREATE_MYSQL_USER="False"
-
-    if [ "$CREATE_MYSQL_USER" == "True" ]; then
+    if [ "${CREATE_MYSQL_USER}" == "True" ]; then
         _user=${MYSQL_USER_NAME:?}
         _userdb=${MYSQL_USER_DB:?}
         _userpass=${MYSQL_USER_PASS:?}
@@ -61,7 +59,7 @@ else
     echo "MySQL user 'root' has no password but only allows local connections"
     echo ""
 
-    if [ "$CREATE_MYSQL_USER" == "True" ]; then
+    if [ "${CREATE_MYSQL_USER}" == "True" ]; then
         echo "We also created"
         echo "A database called '${_userdb}' and"
         echo "a user called '${_user}' with password"
