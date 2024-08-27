@@ -71,8 +71,8 @@ Launch `configure-module`, by setting the following parameters:
 - `mysql_admin_pass`: password of the mysql admin user of all databases
 - `mysql_user_db`: database of the mysql user
 - `mysql_user_name`: name of the mysql user
--  `mysql_user_pass`: password of the mysql user
--  `php_upload_max_filesize`: maximum file size and maximum post size in MB
+- `mysql_user_pass`: password of the mysql user
+- `php_upload_max_filesize`: maximum file size and maximum post size in MB
 
 
 Example:
@@ -157,6 +157,12 @@ if(mail($to, $subject, $message, $headers)) {
 
 execute it by : `php /path/2/script`
 
+## autodiscovery LDAP bind credentials
+
+You can add the environment variable LAMP_LDAP_DOMAIN to the ~/.config/state/environment file. Set it with the domain name you want to bind.
+After that, restart the lamp systemd service. The complete bind credentials should be available as environment variables in the discovery.env file.
+These credentials should also be mounted as environment variables in the lamp-app container.
+
 ## Debug
 
 some CLI are needed to debug
@@ -180,35 +186,17 @@ on the root terminal
  `runagent -m lamp1`
  ```
 podman ps
-CONTAINER ID  IMAGE                                      COMMAND               CREATED        STATUS        PORTS                    NAMES
-d292c6ff28e9  localhost/podman-pause:4.6.1-1702418000                          9 minutes ago  Up 9 minutes  127.0.0.1:20015->80/tcp  80b8de25945f-infra
-d8df02bf6f4a  docker.io/library/mariadb:10.11.5          --character-set-s...  9 minutes ago  Up 9 minutes  127.0.0.1:20015->80/tcp  mariadb-app
-9e58e5bd676f  docker.io/library/nginx:stable-alpine3.17  nginx -g daemon o...  9 minutes ago  Up 9 minutes  127.0.0.1:20015->80/tcp  lamp-app
 ```
 
 you can see what environment variable is inside the container
 ```
 podman exec  lamp-app env
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-TERM=xterm
-PKG_RELEASE=1
-MARIADB_DB_HOST=127.0.0.1
-MARIADB_DB_NAME=lamp
-MARIADB_IMAGE=docker.io/mariadb:10.11.5
-MARIADB_DB_TYPE=mysql
-container=podman
-NGINX_VERSION=1.24.0
-NJS_VERSION=0.7.12
-MARIADB_DB_USER=lamp
-MARIADB_DB_PASSWORD=lamp
-MARIADB_DB_PORT=3306
-HOME=/root
 ```
 
 you can run a shell inside the container
 
 ```
-podman exec -ti   lamp-app sh
+podman exec -ti   lamp-app bash
 / # 
 ```
 ## Testing
