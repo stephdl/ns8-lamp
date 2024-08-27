@@ -27,12 +27,6 @@ if [[ -f "/initdb.d/lamp.sql" ]]; then
 else
     echo "=> No lamp.sql found we do the mysql init"
 
-    # if [[ -e /db/init.sql ]]; then
-    #     echo "=> Initializing the database"
-
-    #     mysql -uroot < /db/init.sql
-    # fi
-
     PASS=${MYSQL_ADMIN_PASS:-$(pwgen -s 12 1)}
     _word=$( [ ${MYSQL_ADMIN_PASS} ] && echo "preset" || echo "random" )
     echo "=> Creating MySQL admin user with password"
