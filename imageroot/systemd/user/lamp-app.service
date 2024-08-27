@@ -13,11 +13,13 @@ Environment=PODMAN_SYSTEMD_UNIT=%n
 EnvironmentFile=%S/state/environment
 EnvironmentFile=%S/state/password.env
 EnvironmentFile=-%S/state/smarthost.env
+EnvironmentFile=-%S/state/discovery.env
 WorkingDirectory=%S/state
 Restart=always
 TimeoutStopSec=70
 ExecStartPre=/bin/rm -f %t/lamp-app.pid %t/lamp-app.ctr-id
 ExecStartPre=-runagent discover-smarthost
+ExecStartPre=-runagent discover-ldap
 ExecStartPre=/bin/mkdir -vp initdb.d
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/lamp-app.pid \
     --cidfile %t/lamp-app.ctr-id --cgroups=no-conmon \
@@ -25,6 +27,8 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/lamp-app.pid \
     --volume mysql:/var/lib/mysql:Z \
     --volume app:/app:Z \
     --volume ./initdb.d:/initdb.d:Z \
+    --env SMTP_* \
+    --env LAMP_* \
     --env CREATE_MYSQL_USER=${CREATE_MYSQL_USER} \
     --env MYSQL_USER_NAME=${MYSQL_USER_NAME} \
     --env MYSQL_USER_DB=${MYSQL_USER_DB} \

@@ -48,6 +48,23 @@ You can also access phpMyAdmin by navigating to:
 
 The username is admin, and the password is the one you set in the user interface.
 
+### Wordpress installation example
+
+go to the container once you have saved the FQDN where the container is running, in you your browser go to  `https://FQDN` or `https://FQDN/phpmyadmin/`, a page must be displayed with software version and another with phpmyadmin
+
+- go into the container
+`runagent -m lamp1 podman exec -ti lamp-app bash`
+- go to the web folder
+`cd /app`
+- download wordpress
+`wget https://fr.wordpress.org/latest-fr_FR.zip`
+- unzip the archive
+`unzip latest-fr_FR.zip`
+- move web files to the root of the web folder
+`mv wordpress/* .`
+`mv wordpress/.* .`
+- go to the `https://FQDN` and finish the installation with the webfolder, you will need the credentials of a mysql user and its associated database name (either created the first time in the user interface or fwith phpmyadmin)
+
 ## Install
 
 Instantiate the module with:
@@ -71,8 +88,8 @@ Launch `configure-module`, by setting the following parameters:
 - `mysql_admin_pass`: password of the mysql admin user of all databases
 - `mysql_user_db`: database of the mysql user
 - `mysql_user_name`: name of the mysql user
--  `mysql_user_pass`: password of the mysql user
--  `php_upload_max_filesize`: maximum file size and maximum post size in MB
+- `mysql_user_pass`: password of the mysql user
+- `php_upload_max_filesize`: maximum file size and maximum post size in MB
 
 
 Example:
@@ -129,6 +146,60 @@ See also the `systemd/user/lamp.service` file.
 This setting discovery is just an example to understand how the module is
 expected to work: it can be rewritten or discarded completely.
 
+
+We use ssmtp to handle sending emails from our server. The php.ini configuration is set to use the `ssmtp -t` command, allowing PHP to send emails seamlessly via ssmtp.
+For other programming languages, ensure that they are configured to use the ssmtp command similarly, typically by setting their mail sending command or path to `ssmtp -t`,
+just like in PHP. This way, all emails sent by different applications or scripts will be routed through ssmtp.
+
+php settings example: `sendmail_path = /usr/sbin/ssmtp -t`
+
+you can try by the command line to send an email with a php script
+
+```
+<?php
+$to = 'recipient@example.com';
+$subject = 'Test Email';
+$message = 'This is a test email sent from PHP using ssmtp.';
+$headers = 'From: your-email@example.com' . "\r\n" .
+           'Reply-To: your-email@example.com' . "\r\n" .
+           'X-Mailer: PHP/' . phpversion();
+
+if(mail($to, $subject, $message, $headers)) {
+    echo 'Email sent successfully!';
+} else {
+    echo 'Failed to send email.';
+}
+?>
+```
+
+execute it by : `php /path/2/script`
+
+## autodiscovery LDAP bind credentials
+
+You can add the environment variable `LAMP_LDAP_DOMAIN` to the `~/.config/state/environment` file. Set it with the domain name you want to bind.
+After that, restart the lamp systemd service. The complete bind credentials should be available as environment variables in the discovery.env file.
+These credentials should also be mounted as environment variables in the lamp-app container.
+
+to modify:
+
+```
+runagent -m lamp1
+vi environment
+```
+
+add the domain you want to retrieve the bind credentials: `LAMP_LDAP_DOMAIN=rocky9-pve3.org`
+
+```
+systemctl restart --user lamp
+```
+
+check if everything is correctly written
+
+```
+cat discovery.env
+podman exec -ti lamp-app env
+```
+
 ## Debug
 
 some CLI are needed to debug
@@ -152,35 +223,17 @@ on the root terminal
  `runagent -m lamp1`
  ```
 podman ps
-CONTAINER ID  IMAGE                                      COMMAND               CREATED        STATUS        PORTS                    NAMES
-d292c6ff28e9  localhost/podman-pause:4.6.1-1702418000                          9 minutes ago  Up 9 minutes  127.0.0.1:20015->80/tcp  80b8de25945f-infra
-d8df02bf6f4a  docker.io/library/mariadb:10.11.5          --character-set-s...  9 minutes ago  Up 9 minutes  127.0.0.1:20015->80/tcp  mariadb-app
-9e58e5bd676f  docker.io/library/nginx:stable-alpine3.17  nginx -g daemon o...  9 minutes ago  Up 9 minutes  127.0.0.1:20015->80/tcp  lamp-app
 ```
 
 you can see what environment variable is inside the container
 ```
 podman exec  lamp-app env
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-TERM=xterm
-PKG_RELEASE=1
-MARIADB_DB_HOST=127.0.0.1
-MARIADB_DB_NAME=lamp
-MARIADB_IMAGE=docker.io/mariadb:10.11.5
-MARIADB_DB_TYPE=mysql
-container=podman
-NGINX_VERSION=1.24.0
-NJS_VERSION=0.7.12
-MARIADB_DB_USER=lamp
-MARIADB_DB_PASSWORD=lamp
-MARIADB_DB_PORT=3306
-HOME=/root
 ```
 
 you can run a shell inside the container
 
 ```
-podman exec -ti   lamp-app sh
+podman exec -ti   lamp-app bash
 / # 
 ```
 ## Testing
