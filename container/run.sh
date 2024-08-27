@@ -102,7 +102,6 @@ if [ ! -f /app/.htaccess ]; then
     } > /app/.htaccess
     # set the permissions
     chmod 644 /app/.htaccess
-    chown www-data:staff /app/.htaccess
     echo "The .htaccess file has been created"
 else
     echo "The .htaccess file already exists"
@@ -116,9 +115,9 @@ mkdir -p /var/run/mysqld
 mkdir -p /var/log/mysql
 
 # Setup user and permissions for MySQL and Apache
-chmod -R 770 /var/lib/mysql
-chmod -R 770 /var/run/mysqld
-chmod -R 770 /var/log/mysql
+# chmod -R 770 /var/lib/mysql
+# chmod -R 770 /var/run/mysqld
+# chmod -R 770 /var/log/mysql
 touch /var/log/mysql/error.log
 
 
@@ -128,9 +127,9 @@ chown -R www-data:staff /var/www
 chown -R www-data:staff /app
 
 
-echo "Allowing Apache/PHP to write to MySQL"
-chown -R www-data:staff /var/lib/mysql
-chown -R www-data:staff /var/run/mysqld
+# echo "Allowing Apache/PHP to write to MySQL"
+# chown -R www-data:staff /var/lib/mysql
+# chown -R www-data:staff /var/run/mysqld
 # chown -R www-data:staff /var/log/mysql
 
 # Listen only on IPv4 addresses
