@@ -50,13 +50,13 @@ The username is admin, and the password is the one you set in the user interface
 
 ### Wordpress installation example
 
-go to the container once you have saved the FQDN where the container is running, in you your browser go to  `https://FQDN` or `https://FQDN/phpmyadmin/`, a page must be displayed with software version and another with phpmyadmin
+Once you have saved the FQDN in the user interface, in your browser, go to https://FQDN or https://FQDN/phpmyadmin/. You should see a page displaying the software version and another page for phpMyAdmin.
 
-- go into the container
+- Access the container to download the web application.
 
 `runagent -m lamp1 podman exec -ti lamp-app bash`
 
-- go to the web folder
+- go to the web folder within the container.
   
 `cd /app`
 
@@ -73,7 +73,7 @@ go to the container once you have saved the FQDN where the container is running,
 mv wordpress/* .
 mv wordpress/.* .
 ```
-- go to the `https://FQDN` and finish the installation with the webfolder, you will need the credentials of a mysql user and its associated database name (either created the first time in the user interface or fwith phpmyadmin)
+- Go to https://FQDN and complete the installation using the web folder. You'll need the credentials of a MySQL user and the associated database name, which can be created either during the initial setup in the user interface or through phpMyAdmin.
   
 ![Capture d’écran du 2024-08-27 15-42-22](https://github.com/user-attachments/assets/2f57fe3d-a144-4506-9e4e-9668560e7060)
 
