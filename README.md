@@ -163,6 +163,26 @@ You can add the environment variable `LAMP_LDAP_DOMAIN` to the `~/.config/state/
 After that, restart the lamp systemd service. The complete bind credentials should be available as environment variables in the discovery.env file.
 These credentials should also be mounted as environment variables in the lamp-app container.
 
+to modify:
+
+```
+runagent -m lamp1
+vi environment
+```
+
+add the domain you want to retrieve the bind credentials: `LAMP_LDAP_DOMAIN=rocky9-pve3.org`
+
+```
+systemctl restart --user lamp
+```
+
+check if everything is correctly written
+
+```
+cat discovery.env
+podman exec -ti lamp-app env
+```
+
 ## Debug
 
 some CLI are needed to debug
