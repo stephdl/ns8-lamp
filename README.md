@@ -77,6 +77,10 @@ mv wordpress/.* .
   
 ![Capture d’écran du 2024-08-27 15-42-22](https://github.com/user-attachments/assets/2f57fe3d-a144-4506-9e4e-9668560e7060)
 
+### Custom php or apache directives
+
+You can use a `.htaccess` file directly in the `/app` directory of the container. It will be read and applied accordingly.
+
 ## Install
 
 Instantiate the module with:
