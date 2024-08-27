@@ -91,6 +91,23 @@ fi
 ln -sf /dev/stderr /var/log/apache2/access.log
 ln -sf /dev/stderr /var/log/apache2/error.log
 
+# create a .htacess file if not exists
+if [ ! -f /app/.htaccess ]; then
+    echo "Creating .htaccess file"
+    {
+        echo "# write your custom settings, uncomment or add your directives"
+        echo "# php_value max_execution_time 600"
+        echo "# php_value max_input_time 600"
+        echo "# php_value memory_limit 512M" 
+    } > /app/.htaccess
+    # set the permissions
+    chmod 644 /app/.htaccess
+    chown www-data:staff /app/.htaccess
+    echo "The .htaccess file has been created"
+else
+    echo "The .htaccess file already exists"
+fi
+
 echo "Editing phpmyadmin config"
 sed -i "s/cfg\['blowfish_secret'\] = ''/cfg['blowfish_secret'] = '`openssl rand -hex 16`'/" /var/www/phpmyadmin/config.inc.php
 
