@@ -48,6 +48,23 @@ You can also access phpMyAdmin by navigating to:
 
 The username is admin, and the password is the one you set in the user interface.
 
+### Wordpress installation example
+
+go to the container once you have saved the FQDN where the container is running, in you your browser go to  `https://FQDN` or `https://FQDN/phpmyadmin/`, a page must be displayed with software version and another with phpmyadmin
+
+- go into the container
+`runagent -m lamp1 podman exec -ti lamp-app bash`
+- go to the web folder
+`cd /app`
+- download wordpress
+`wget https://fr.wordpress.org/latest-fr_FR.zip`
+- unzip the archive
+`unzip latest-fr_FR.zip`
+- move web files to the root of the web folder
+`mv wordpress/* .`
+`mv wordpress/.* .`
+- go to the `https://FQDN` and finish the installation with the webfolder, you will need the credentials of a mysql user and its associated database name (either created the first time in the user interface or fwith phpmyadmin)
+
 ## Install
 
 Instantiate the module with:
@@ -130,7 +147,7 @@ This setting discovery is just an example to understand how the module is
 expected to work: it can be rewritten or discarded completely.
 
 
-We use ssmtp to handle sending emails from our server. The php.ini configuration is set to use the ssmtp -t command, allowing PHP to send emails seamlessly via ssmtp.
+We use ssmtp to handle sending emails from our server. The php.ini configuration is set to use the `ssmtp -t` command, allowing PHP to send emails seamlessly via ssmtp.
 For other programming languages, ensure that they are configured to use the ssmtp command similarly, typically by setting their mail sending command or path to `ssmtp -t`,
 just like in PHP. This way, all emails sent by different applications or scripts will be routed through ssmtp.
 
