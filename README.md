@@ -134,7 +134,7 @@ We use ssmtp to handle sending emails from our server. The php.ini configuration
 For other programming languages, ensure that they are configured to use the ssmtp command similarly, typically by setting their mail sending command or path to `ssmtp -t`,
 just like in PHP. This way, all emails sent by different applications or scripts will be routed through ssmtp.
 
-
+php settings example: `sendmail_path = /usr/sbin/ssmtp -t`
 
 you can try by the command line to send an email with a php script
 
