@@ -2,6 +2,10 @@
 #
 # Prepare our container for initial boot.
 
+set -e 
+# Redirect any output to the journal (stderr)
+exec 1>&2
+
 # Where does our MySQL data live?
 VOLUME_HOME="/var/lib/mysql"
 #pip install asynchat
@@ -50,9 +54,9 @@ if [ -e /etc/php/$PHP_VERSION/cli/php.ini ]; then replace_cli_php_ini_values $PH
 # writing ssmtp.conf
 # Check if SMTP is enabled
 
-SSMTP_CONF="/etc/ssmtp/ssmtp.conf"
+echo "Editing ssmtp.conf"
 if [[ "$SMTP_ENABLED" != "1" ]]; then
-    echo "SMTP is not enabled. Exiting."
+    echo "SMTP relay settings from cluster-admin is not enabled. Exiting."
 else
     # Create or overwrite the ssmtp.conf file
     {
@@ -110,35 +114,25 @@ fi
 echo "Editing phpmyadmin config"
 sed -i "s/cfg\['blowfish_secret'\] = ''/cfg['blowfish_secret'] = '`openssl rand -hex 16`'/" /var/www/phpmyadmin/config.inc.php
 
-echo "Setting up MySQL directories"
-mkdir -p /var/run/mysqld
-mkdir -p /var/log/mysql
-
-# Setup user and permissions for MySQL and Apache
-# chmod -R 770 /var/lib/mysql
-# chmod -R 770 /var/run/mysqld
-# chmod -R 770 /var/log/mysql
-touch /var/log/mysql/error.log
-
-
 echo "Allowing Apache/PHP to write to the app"
 # Tweaks to give Apache/PHP write permissions to the app
 chown -R www-data:staff /var/www
 chown -R www-data:staff /app
 
-
-# echo "Allowing Apache/PHP to write to MySQL"
-# chown -R www-data:staff /var/lib/mysql
-# chown -R www-data:staff /var/run/mysqld
-# chown -R www-data:staff /var/log/mysql
-
 # Listen only on IPv4 addresses
 sed -i 's/^Listen .*/Listen 0.0.0.0:80/' /etc/apache2/ports.conf
 
+echo "Editing Mysql config"
 if [ -e /var/run/mysqld/mysqld.sock ];then
     echo "Removing MySQL socket"
     rm /var/run/mysqld/mysqld.sock
 fi
+
+
+echo "Setting up MySQL directories"
+mkdir -p /var/run/mysqld
+mkdir -p /var/log/mysql
+touch /var/log/mysql/error.log
 
 echo "Editing MySQL config"
 sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
@@ -153,7 +147,7 @@ ln -sf /dev/stderr /var/log/mysql/error.log
 
 if [[ ! -d $VOLUME_HOME/mysql ]]; then
     echo "=> An empty or uninitialized MySQL volume is detected in $VOLUME_HOME"
-    echo "=> Installing MySQL ..."
+    echo "=> Installing or restoring MySQL ..."
 
     # Try the 'preferred' solution
     mariadb-install-db --user=root --auth-root-authentication-method=socket --skip-test-db 

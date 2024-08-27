@@ -1,5 +1,9 @@
 #!/bin/bash
 
+set -e 
+# Redirect any output to the journal (stderr)
+exec 1>&2
+
 mysqld_safe --socket=/var/run/mysqld/mysqld.sock --user=root > /dev/null 2>&1 &
 RET=1
 while [[ RET -ne 0 ]]; do
@@ -47,10 +51,10 @@ else
         CREATE_MYSQL_USER=true
     fi
 
-    if [ "$CREATE_MYSQL_USER" = true ]; then
-        _user=${MYSQL_USER_NAME:-user}
-        _userdb=${MYSQL_USER_DB:-db}
-        _userpass=${MYSQL_USER_PASS:-password}
+    if [ "$CREATE_MYSQL_USER" == "True" ]; then
+        _user=${MYSQL_USER_NAME:?}
+        _userdb=${MYSQL_USER_DB:?}
+        _userpass=${MYSQL_USER_PASS:?}
 
         mysql -uroot -e "CREATE USER '${_user}'@'%' IDENTIFIED BY  '${_userpass}'"
         mysql -uroot -e "GRANT USAGE ON *.* TO  '${_user}'@'%' IDENTIFIED BY '${_userpass}'"
@@ -72,7 +76,7 @@ else
     echo "MySQL user 'root' has no password but only allows local connections"
     echo ""
 
-    if [ "$CREATE_MYSQL_USER" = true ]; then
+    if [ "$CREATE_MYSQL_USER" == "True" ]; then
         echo "We also created"
         echo "A database called '${_userdb}' and"
         echo "a user called '${_user}' with password"
