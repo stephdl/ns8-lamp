@@ -25,7 +25,7 @@ function replace_apache_php_ini_values () {
         -e "s/^max_execution_time.*/max_execution_time = ${PHP_MAX_EXECUTION_TIME}/" /etc/php/$1/apache2/php.ini
 
     sed -i "s/;date.timezone =/date.timezone = Europe\/London/g" /etc/php/$1/apache2/php.ini
-    sed -i "s/;user_ini.filename = \".user.ini\"/user_ini.filename = \".user.ini\"/g" /etc/php/$1/apache2/php.ini
+    #sed -i "s/;user_ini.filename = \".user.ini\"/user_ini.filename = \".user.ini\"/g" /etc/php/$1/apache2/php.ini
     sed -i "s|;sendmail_path =|sendmail_path = /usr/sbin/ssmtp -t|" /etc/php/$1/apache2/php.ini
 
 }
