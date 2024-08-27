@@ -159,7 +159,7 @@ execute it by : `php /path/2/script`
 
 ## autodiscovery LDAP bind credentials
 
-You can add the environment variable LAMP_LDAP_DOMAIN to the ~/.config/state/environment file. Set it with the domain name you want to bind.
+You can add the environment variable `LAMP_LDAP_DOMAIN` to the `~/.config/state/environment` file. Set it with the domain name you want to bind.
 After that, restart the lamp systemd service. The complete bind credentials should be available as environment variables in the discovery.env file.
 These credentials should also be mounted as environment variables in the lamp-app container.
 
