@@ -30,15 +30,14 @@ else
     PASS=${MYSQL_ADMIN_PASS:-$(pwgen -s 12 1)}
     _word=$( [ ${MYSQL_ADMIN_PASS} ] && echo "preset" || echo "random" )
     echo "=> Creating MySQL admin user with password"
-    mysql -uroot -e "CREATE USER 'admin'@'%' IDENTIFIED BY '$PASS'"
-    mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION"
-    mysql -uroot -e "CREATE DATABASE IF NOT EXISTS phpmyadmin"
+    mysql -uroot -e "CREATE USER 'admin'@'localhost' IDENTIFIED BY '$PASS'"
+    mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION"
 
     echo "create version_user for mysql version"
     mysql -uroot -e "CREATE USER 'version_user'@'localhost' IDENTIFIED BY 'version_password'";
     mysql -uroot -e "GRANT USAGE ON *.* TO 'version_user'@'localhost';"
 
-    echo "Create a new database and for phpmyadmin"
+    echo "Create a new database for phpmyadmin"
     mysql -uroot < /var/www/phpMyAdmin-*/sql/create_tables.sql
 
     CREATE_MYSQL_USER="False"
