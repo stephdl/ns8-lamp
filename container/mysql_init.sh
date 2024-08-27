@@ -36,8 +36,7 @@ else
 
     echo "create version_user for mysql version"
     mysql -uroot -e "CREATE USER 'version_user'@'localhost' IDENTIFIED BY 'version_password'";
-    mysql -uroot -e "GRANT USAGE ON *.* TO 'version_user'@'localhost';
-"
+    mysql -uroot -e "GRANT USAGE ON *.* TO 'version_user'@'localhost';"
 
     echo "Create a new database and for phpmyadmin"
     mysql -uroot < /var/www/phpMyAdmin-*/sql/create_tables.sql
