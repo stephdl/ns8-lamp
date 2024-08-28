@@ -41,5 +41,9 @@
     # channel.
     SetEnvIf x-forwarded-proto https HTTPS=on
 
-</VirtualHost>
+    <IfModule remoteip_module>
+        RemoteIPHeader X-Forwarded-For
+        RemoteIPInternalProxy 10.0.0.0/8 # Example, replace with your internal network
+    </IfModule>
 
+</VirtualHost>
