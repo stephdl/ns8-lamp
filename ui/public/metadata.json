@@ -1,19 +1,19 @@
 {
   "name": "lamp",
   "description": {
-    "en": "My lamp module"
+    "en": "LAMP provides a comprehensive and open-source platform for developing, deploying, and managing dynamic PHP web applications and websites"
   },
   "categories": [],
   "authors": [
     {
-      "name": "Name Surname",
-      "email": "author@yourmail.org"
+      "name": "Stephane de Labrusse",
+      "email": "stephdl@de-labrusse.fr"
     }
   ],
   "docs": {
-    "documentation_url": "https://docs.lamp.com/",
-    "bug_url": "https://github.com/NethServer/dev",
-    "code_url": "https://github.com/author/ns8-lamp"
+    "documentation_url": "https://github.com/stephdl/ns8-lamp",
+    "bug_url": "https://github.com/stephdl/dev",
+    "code_url": "https://github.com/stephdl/ns8-lamp"
   },
-  "source": "ghcr.io/nethserver/lamp"
+  "source": "ghcr.io/stephdl/lamp"
 }
