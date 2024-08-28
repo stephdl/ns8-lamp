@@ -15,6 +15,11 @@ ENV BOOT2DOCKER_GID 50
 
 ENV PHPMYADMIN_VERSION=5.2.1
 
+#Environment variables to configure php
+ENV PHP_UPLOAD_MAX_FILESIZE 100M
+ENV PHP_POST_MAX_SIZE 100M
+ENV PHP_MEMORY_LIMIT 512M
+ENV PHP_MAX_EXECUTION_TIME 600
 
 ARG PHP_VERSION
 ENV PHP_VERSION=$PHP_VERSION
@@ -109,6 +114,15 @@ RUN tar xfvz /tmp/phpmyadmin.tar.gz -C /var/www
 RUN ln -s /var/www/phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages /var/www/phpmyadmin
 RUN mv /var/www/phpmyadmin/config.sample.inc.php /var/www/phpmyadmin/config.inc.php
 
+RUN echo "Updating settings for PHP ${PHP_VERSION}" && \
+        sed -ri -e "s/^upload_max_filesize.*/upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}/" \
+        -e "s/^post_max_size.*/post_max_size = ${PHP_POST_MAX_SIZE}/" /etc/php/${PHP_VERSION}/apache2/php.ini \
+        -e "s/^memory_limit.*/memory_limit = ${PHP_MEMORY_LIMIT}/" /etc/php/${PHP_VERSION}/apache2/php.ini \
+        -e "s/^max_execution_time.*/max_execution_time = ${PHP_MAX_EXECUTION_TIME}/" /etc/php/${PHP_VERSION}/apache2/php.ini \
+        -e "s/^;date.timezone.*/date.timezone = Europe\/London/" /etc/php/${PHP_VERSION}/apache2/php.ini \
+        -e "s|;sendmail_path =|sendmail_path = /usr/sbin/ssmtp -t|" /etc/php/${PHP_VERSION}/apache2/php.ini \
+        -e  "s/;date.timezone =/date.timezone = UTC/g" /etc/php/${PHP_VERSION}/cli/php.ini
+
 # Add composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
     php composer-setup.php && \
@@ -119,18 +133,44 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 ADD apache_default /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 
+RUN echo "# log apache to stderr" && \
+        ln -sf /dev/stderr /var/log/apache2/access.log && \
+        ln -sf /dev/stderr /var/log/apache2/error.log
+
+
+ RUN echo "# Listen only on IPv4 addresses" && \
+    sed -i 's/^Listen .*/Listen 0.0.0.0:80/' /etc/apache2/ports.conf
+
+
 # Configure /app folder with sample app
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 ADD index.php /app
 
+RUN echo "Allowing Apache/PHP to write to the app" && \
+        chown -R www-data:staff /var/www && \
+        chown -R www-data:staff /app
+
+RUN echo "Editing APACHE_RUN_GROUP environment variable" && \
+        sed -i "s/export APACHE_RUN_GROUP=www-data/export APACHE_RUN_GROUP=staff/" /etc/apache2/envvars
+
+RUN echo "Setting up MySQL directories" && \
+        mkdir -p /var/run/mysqld && \
+        mkdir -p /var/log/mysql && \
+        touch /var/log/mysql/error.log
+
+RUN echo "Editing MySQL config" && \
+        sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf && \
+        sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf && \
+        sed -i "s/user.*/user = www-data/" /etc/mysql/mariadb.conf.d/50-server.cnf && \
+        sed -i "s|#log_error = /var/log/mysql/error.log|log_error = /var/log/mysql/error.log|" /etc/mysql/mariadb.conf.d/50-server.cnf && \
+        sed -i "s/skip_log_error/#skip_log_error/" /etc/mysql/mariadb.conf.d/50-mysqld_safe.cnf && \
+        sed -i "s/syslog/#syslog/" /etc/mysql/mariadb.conf.d/50-mysqld_safe.cnf
+
+RUN echo "# log mysql to stderr" && \
+        ln -sf /dev/stderr /var/log/mysql/error.log
 # clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-#Environment variables to configure php
-ENV PHP_UPLOAD_MAX_FILESIZE 100M
-ENV PHP_POST_MAX_SIZE 100M
-ENV PHP_MEMORY_LIMIT 512M
-ENV PHP_MAX_EXECUTION_TIME 600
 
 # Add volumes for the app and MySql
 VOLUME  ["/var/lib/mysql", "/app" ]
