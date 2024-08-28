@@ -125,9 +125,6 @@ RUN echo "# log apache to stderr" && \
         ln -sf /dev/stderr /var/log/apache2/access.log && \
         ln -sf /dev/stderr /var/log/apache2/error.log
 
-RUN echo "Allowing Apache/PHP to write to the app" && \
-        chown -R www-data:staff /var/www && \
-        chown -R www-data:staff /app
 
  RUN echo "# Listen only on IPv4 addresses" && \
     sed -i 's/^Listen .*/Listen 0.0.0.0:80/' /etc/apache2/ports.conf
@@ -136,6 +133,11 @@ RUN echo "Allowing Apache/PHP to write to the app" && \
 # Configure /app folder with sample app
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 ADD index.php /app
+
+RUN echo "Allowing Apache/PHP to write to the app" && \
+        chown -R www-data:staff /var/www && \
+        chown -R www-data:staff /app
+
 RUN echo "Updating settings for PHP ${PHP_VERSION}" && \
         sed -ri -e "s/^upload_max_filesize.*/upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}/" \
         -e "s/^post_max_size.*/post_max_size = ${PHP_POST_MAX_SIZE}/" /etc/php/${PHP_VERSION}/apache2/php.ini \
