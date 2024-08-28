@@ -15,6 +15,11 @@ ENV BOOT2DOCKER_GID 50
 
 ENV PHPMYADMIN_VERSION=5.2.1
 
+#Environment variables to configure php
+ENV PHP_UPLOAD_MAX_FILESIZE 100M
+ENV PHP_POST_MAX_SIZE 100M
+ENV PHP_MEMORY_LIMIT 512M
+ENV PHP_MAX_EXECUTION_TIME 600
 
 ARG PHP_VERSION
 ENV PHP_VERSION=$PHP_VERSION
@@ -108,10 +113,17 @@ RUN wget -O /tmp/phpmyadmin.tar.gz https://files.phpmyadmin.net/phpMyAdmin/${PHP
 RUN tar xfvz /tmp/phpmyadmin.tar.gz -C /var/www
 RUN ln -s /var/www/phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages /var/www/phpmyadmin
 RUN mv /var/www/phpmyadmin/config.sample.inc.php /var/www/phpmyadmin/config.inc.php
-RUN echo "Editing phpmyadmin config" && \
-        sed -i "s/cfg\['blowfish_secret'\] = ''/cfg['blowfish_secret'] = '`openssl rand -hex 16`'/" /var/www/phpmyadmin/config.inc.php
 
-        # Add composer
+RUN echo "Updating settings for PHP ${PHP_VERSION}" && \
+        sed -ri -e "s/^upload_max_filesize.*/upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}/" \
+        -e "s/^post_max_size.*/post_max_size = ${PHP_POST_MAX_SIZE}/" /etc/php/${PHP_VERSION}/apache2/php.ini \
+        -e "s/^memory_limit.*/memory_limit = ${PHP_MEMORY_LIMIT}/" /etc/php/${PHP_VERSION}/apache2/php.ini \
+        -e "s/^max_execution_time.*/max_execution_time = ${PHP_MAX_EXECUTION_TIME}/" /etc/php/${PHP_VERSION}/apache2/php.ini \
+        -e "s/^;date.timezone.*/date.timezone = Europe\/London/" /etc/php/${PHP_VERSION}/apache2/php.ini \
+        -e "s|;sendmail_path =|sendmail_path = /usr/sbin/ssmtp -t|" /etc/php/${PHP_VERSION}/apache2/php.ini \
+        -e  "s/;date.timezone =/date.timezone = UTC/g" /etc/php/${PHP_VERSION}/cli/php.ini
+
+# Add composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
     php composer-setup.php && \
     php -r "unlink('composer-setup.php');" && \
@@ -138,15 +150,6 @@ RUN echo "Allowing Apache/PHP to write to the app" && \
         chown -R www-data:staff /var/www && \
         chown -R www-data:staff /app
 
-RUN echo "Updating settings for PHP ${PHP_VERSION}" && \
-        sed -ri -e "s/^upload_max_filesize.*/upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}/" \
-        -e "s/^post_max_size.*/post_max_size = ${PHP_POST_MAX_SIZE}/" /etc/php/${PHP_VERSION}/apache2/php.ini \
-        -e "s/^memory_limit.*/memory_limit = ${PHP_MEMORY_LIMIT}/" /etc/php/${PHP_VERSION}/apache2/php.ini \
-        -e "s/^max_execution_time.*/max_execution_time = ${PHP_MAX_EXECUTION_TIME}/" /etc/php/${PHP_VERSION}/apache2/php.ini \
-        -e "s/^;date.timezone.*/date.timezone = Europe\/London/" /etc/php/${PHP_VERSION}/apache2/php.ini \
-        -e "s|;sendmail_path =|sendmail_path = /usr/sbin/ssmtp -t|" /etc/php/${PHP_VERSION}/apache2/php.ini \
-        -e  "s/;date.timezone =/date.timezone = UTC/g" /etc/php/${PHP_VERSION}/cli/php.ini
-
 RUN echo "Editing APACHE_RUN_GROUP environment variable" && \
         sed -i "s/export APACHE_RUN_GROUP=www-data/export APACHE_RUN_GROUP=staff/" /etc/apache2/envvars
 
@@ -168,11 +171,6 @@ RUN echo "# log mysql to stderr" && \
 # clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-#Environment variables to configure php
-ENV PHP_UPLOAD_MAX_FILESIZE 100M
-ENV PHP_POST_MAX_SIZE 100M
-ENV PHP_MEMORY_LIMIT 512M
-ENV PHP_MAX_EXECUTION_TIME 600
 
 # Add volumes for the app and MySql
 VOLUME  ["/var/lib/mysql", "/app" ]

@@ -39,6 +39,16 @@ else
     echo "ssmtp.conf has been configured."
 fi
 
+echo "Updating settings for PHP ${PHP_VERSION}" && \
+    sed -ri -e "s/^upload_max_filesize.*/upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}/" \
+    -e "s/^post_max_size.*/post_max_size = ${PHP_POST_MAX_SIZE}/" /etc/php/${PHP_VERSION}/apache2/php.ini \
+    -e "s/^memory_limit.*/memory_limit = ${PHP_MEMORY_LIMIT}/" /etc/php/${PHP_VERSION}/apache2/php.ini \
+    -e "s/^max_execution_time.*/max_execution_time = ${PHP_MAX_EXECUTION_TIME}/" /etc/php/${PHP_VERSION}/apache2/php.ini
+
+
+echo "Editing phpmyadmin config" && \
+    sed -i "s/cfg\['blowfish_secret'\] = ''/cfg['blowfish_secret'] = '`openssl rand -hex 16`'/" /var/www/phpmyadmin/config.inc.php
+
 # create a .htacess file if not exists
 if [ ! -f /app/.htaccess ]; then
     echo "Creating .htaccess file"
