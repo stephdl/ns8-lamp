@@ -1,4 +1,4 @@
-FROM docker.io/phusion/baseimage:noble-1.0.0
+FROM docker.io/library/debian:bookworm-slim
 MAINTAINER stephane de Labrusse <stephdl@de-labrusse.fr>
 ENV REFRESHED_AT 2024-08-25
 
