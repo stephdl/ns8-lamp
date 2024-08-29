@@ -1,31 +1,3 @@
-<?php
-$db = new PDO('mysql:host=localhost', 'version_user', 'version_password');
-
-function getOSInformation()
-{
-    if (false == function_exists("shell_exec") || false == is_readable("/etc/os-release")) {
-        return null;
-    }
-
-    $os = shell_exec('cat /etc/os-release');
-    $listIds = preg_match_all('/.*=/', $os, $matchListIds);
-    $listIds = $matchListIds[0];
-
-    $listVal = preg_match_all('/=.*/', $os, $matchListVal);
-    $listVal = $matchListVal[0];
-
-    array_walk($listIds, function (&$v, $k) {
-        $v = strtolower(str_replace('=', '', $v));
-    });
-
-    array_walk($listVal, function (&$v, $k) {
-        $v = preg_replace('/=|"/', '', $v);
-    });
-
-    return array_combine($listIds, $listVal);
-}
-$osInfo = getOSInformation();
-?>
 <!doctype html>
 <html lang=en>
 
@@ -46,14 +18,12 @@ $osInfo = getOSInformation();
 
         pre {
             font-family: 'Source Code Pro', monospace;
-
             padding: 16px;
             overflow: auto;
             font-size: 85%;
             line-height: 1.45;
             background-color: #f7f7f7;
             border-radius: 3px;
-
             word-wrap: normal;
         }
 
@@ -61,6 +31,21 @@ $osInfo = getOSInformation();
             max-width: 1024px;
             width: 100%;
             margin: 0 auto;
+        }
+
+        .warning {
+            background-color: #ffeeba;
+            color: #856404;
+            padding: 10px;
+            border: 1px solid #ffeeba;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .warning-icon {
+            font-weight: bold;
+            color: #856404;
+            margin-right: 5px;
         }
     </style>
 </head>
@@ -72,12 +57,14 @@ $osInfo = getOSInformation();
                 stephdl/ns8-lamp</h2>
         </header>
         <article>
-            <p>
-                For documentation, <a href="https://github.com/stephdl/ns8-lamp" target="_blank">click here</a>.
-            </p>
-            <p>
-                For PHP information (Please remove the phpinfo.phpp file), <a href="phpinfo.php" target="_blank">click here</a>.
-            </p>
+            <p>For documentation, <a href="https://github.com/stephdl/ns8-lamp" target="_blank">click here</a>.</p>
+            <p>For PHP information, <a href="phpinfo.php" target="_blank">click here</a>.</p>
+
+            <div class="warning">
+                <span class="warning-icon">⚠️</span>
+                <strong>Important:</strong> Please delete the <code>phpinfo.php</code> file after installing the web
+                application to avoid exposing sensitive information.
+            </div>
         </article>
         <section>
             <pre>
