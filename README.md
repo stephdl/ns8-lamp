@@ -73,6 +73,12 @@ Once you have saved the FQDN in the user interface, in your browser, go to https
 mv wordpress/* .
 mv wordpress/.* .
 ```
+
+- allow apache to write in wp-content and wp-admin
+
+ `chown -R www-data:staff wp-content/`
+ `chown -R www-data:staff wp-admin/`
+
 - Go to https://FQDN and complete the installation using the web folder. You'll need the credentials of a MySQL user and the associated database name, which can be created either during the initial setup in the user interface or through phpMyAdmin.
   
 ![Capture d’écran du 2024-08-27 15-42-22](https://github.com/user-attachments/assets/2f57fe3d-a144-4506-9e4e-9668560e7060)
