@@ -34,12 +34,13 @@ RUN usermod -u ${BOOT2DOCKER_ID} www-data && \
 
 # Install packages
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt update && apt -y install software-properties-common python3-launchpadlib
-RUN LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php && \
-  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C && \
-  apt-get update && \
-  apt-get -y upgrade && \
-  apt-get -y install supervisor \
+RUN apt-get update && \
+      apt-get -y install lsb-release ca-certificates curl && \
+      curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb && \
+      dpkg -i /tmp/debsuryorg-archive-keyring.deb && \
+      sh -c 'echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list' && \
+      apt-get -y upgrade && \
+      apt-get -y install supervisor \
       wget \
       git \
       apache2 \
