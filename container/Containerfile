@@ -146,6 +146,7 @@ RUN echo "# log apache to stderr" && \
 # Configure /app folder with sample app
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 ADD index.php /app
+ADD phpinfo.php /app
 
 RUN echo "Allowing Apache/PHP to write to the app" && \
         chown -R www-data:staff /var/www && \
