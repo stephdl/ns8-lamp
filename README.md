@@ -76,8 +76,10 @@ mv wordpress/.* .
 
 - allow apache to write in wp-content and wp-admin
 
- `chown -R www-data:staff wp-content/`
- `chown -R www-data:staff wp-admin/`
+```
+chown -R www-data:staff wp-content/
+chown -R www-data:staff wp-admin/
+```
 
 - Go to https://FQDN and complete the installation using the web folder. You'll need the credentials of a MySQL user and the associated database name, which can be created either during the initial setup in the user interface or through phpMyAdmin.
   
