@@ -51,6 +51,8 @@ RUN LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php && \
       ftp \
       ftp-ssl \
       ssmtp \
+      php${PHP_VERSION}-ftp \
+      php${PHP_VERSION}-ldap \
       php${PHP_VERSION}-pdo-mysql \
       php${PHP_VERSION}-mysql \
       php${PHP_VERSION}-apcu \
