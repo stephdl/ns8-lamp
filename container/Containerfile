@@ -1,6 +1,6 @@
 FROM docker.io/phusion/baseimage:noble-1.0.0
 MAINTAINER stephane de Labrusse <stephdl@de-labrusse.fr>
-ENV REFRESHED_AT 2021-09-07
+ENV REFRESHED_AT 2024-08-25
 
 # based on Matthew Rayner <hello@rayner.io> https://github.com/mattrayner/docker-lamp
 # based on dgraziotin/lamp
