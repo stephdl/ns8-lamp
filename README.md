@@ -48,6 +48,8 @@ You can also access phpMyAdmin by navigating to:
 
 The username is admin, and the password is the one you set in the user interface.
 
+⚠️ Important: Please delete the phpinfo.php file in the `/app` folder after installing the web application to avoid exposing sensitive information.
+
 ### Wordpress installation example
 
 Once you have saved the FQDN in the user interface, in your browser, go to https://FQDN or https://FQDN/phpmyadmin/. You should see a page displaying the software version and another page for phpMyAdmin.
@@ -80,6 +82,10 @@ mv wordpress/.* .
 chown -R www-data:staff wp-content/
 chown -R www-data:staff wp-admin/
 ```
+
+⚠️ Important: Please delete the phpinfo.php file in the `/app` folder after installing the web application to avoid exposing sensitive information.
+
+`rm -f /app/phpinfo.php`
 
 - Go to https://FQDN and complete the installation using the web folder. You'll need the credentials of a MySQL user and the associated database name, which can be created either during the initial setup in the user interface or through phpMyAdmin.
   
