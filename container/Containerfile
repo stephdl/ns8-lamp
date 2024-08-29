@@ -1,4 +1,4 @@
-FROM docker.io/phusion/baseimage:noble-1.0.0
+FROM docker.io/ubuntu:noble
 MAINTAINER stephane de Labrusse <stephdl@de-labrusse.fr>
 ENV REFRESHED_AT 2024-08-25
 
@@ -34,52 +34,43 @@ RUN usermod -u ${BOOT2DOCKER_ID} www-data && \
 
 # Install packages
 ENV DEBIAN_FRONTEND noninteractive
+RUN apt update && apt-get install -y software-properties-common python3-launchpadlib
 RUN LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php && \
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C && \
   apt-get update && \
   apt-get -y upgrade && \
   apt-get -y install supervisor \
+      vim \
+      nano \
       wget \
       git \
       apache2 \
-      php${PHP_VERSION}-xdebug \
       libapache2-mod-php${PHP_VERSION} \
       mariadb-server \
       pwgen \
       ftp \
       ftp-ssl \
       ssmtp \
+      php${PHP_VERSION}-ftp \
+      php${PHP_VERSION}-ldap \
       php${PHP_VERSION}-pdo-mysql \
       php${PHP_VERSION}-mysql \
       php${PHP_VERSION}-apcu \
       php${PHP_VERSION}-gd \
       php${PHP_VERSION}-xml \
-      php${PHP_VERSION}-ldap \
       php${PHP_VERSION}-mbstring \
-      php${PHP_VERSION}-mcrypt \
       php${PHP_VERSION}-memcached \
       php${PHP_VERSION}-imagick \
       php${PHP_VERSION}-intl \
       php${PHP_VERSION}-bcmath \
       php${PHP_VERSION}-bz2 \
-      php${PHP_VERSION}-calendar \
-      php${PHP_VERSION}-dba \
-      php${PHP_VERSION}-enchant \
-      php${PHP_VERSION}-exif \
-      php${PHP_VERSION}-ftp \
       php${PHP_VERSION}-gettext \
       php${PHP_VERSION}-gmp \
       php${PHP_VERSION}-imap \
-      php${PHP_VERSION}-interbase \
-      php${PHP_VERSION}-ldap \
       php${PHP_VERSION}-odbc \
-      php${PHP_VERSION}-pspell \
-      php${PHP_VERSION}-snmp \
       php${PHP_VERSION}-soap \
       php${PHP_VERSION}-sqlite3 \
       php${PHP_VERSION}-tidy \
-      php${PHP_VERSION}-xmlrpc \
-      php${PHP_VERSION}-xsl \
       php${PHP_VERSION}-zip \
       php${PHP_VERSION}-curl \
       php${PHP_VERSION}-cli \
@@ -145,6 +136,7 @@ RUN echo "# log apache to stderr" && \
 # Configure /app folder with sample app
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 ADD index.php /app
+ADD phpinfo.php /app
 
 RUN echo "Allowing Apache/PHP to write to the app" && \
         chown -R www-data:staff /var/www && \
