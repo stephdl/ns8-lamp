@@ -40,10 +40,11 @@ RUN LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php && \
   apt-get update && \
   apt-get -y upgrade && \
   apt-get -y install supervisor \
+      vim \
+      nano \
       wget \
       git \
       apache2 \
-      php${PHP_VERSION}-xdebug \
       libapache2-mod-php${PHP_VERSION} \
       mariadb-server \
       pwgen \
@@ -55,32 +56,19 @@ RUN LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php && \
       php${PHP_VERSION}-apcu \
       php${PHP_VERSION}-gd \
       php${PHP_VERSION}-xml \
-      php${PHP_VERSION}-ldap \
       php${PHP_VERSION}-mbstring \
-      php${PHP_VERSION}-mcrypt \
       php${PHP_VERSION}-memcached \
       php${PHP_VERSION}-imagick \
       php${PHP_VERSION}-intl \
       php${PHP_VERSION}-bcmath \
       php${PHP_VERSION}-bz2 \
-      php${PHP_VERSION}-calendar \
-      php${PHP_VERSION}-dba \
-      php${PHP_VERSION}-enchant \
-      php${PHP_VERSION}-exif \
-      php${PHP_VERSION}-ftp \
       php${PHP_VERSION}-gettext \
       php${PHP_VERSION}-gmp \
       php${PHP_VERSION}-imap \
-      php${PHP_VERSION}-interbase \
-      php${PHP_VERSION}-ldap \
       php${PHP_VERSION}-odbc \
-      php${PHP_VERSION}-pspell \
-      php${PHP_VERSION}-snmp \
       php${PHP_VERSION}-soap \
       php${PHP_VERSION}-sqlite3 \
       php${PHP_VERSION}-tidy \
-      php${PHP_VERSION}-xmlrpc \
-      php${PHP_VERSION}-xsl \
       php${PHP_VERSION}-zip \
       php${PHP_VERSION}-curl \
       php${PHP_VERSION}-cli \
