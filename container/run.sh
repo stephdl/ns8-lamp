@@ -68,7 +68,7 @@ fi
 echo "Editing Mysql config"
 if [ -e /var/run/mysqld/mysqld.sock ];then
     echo "Removing MySQL socket"
-    rm /var/run/mysqld/mysqld.sock
+    rm -f /var/run/mysqld/mysqld.sock
 fi
 
 
@@ -77,7 +77,7 @@ if [[ ! -d /var/lib/mysql/mysql ]]; then
     echo "=> Installing or restoring MySQL ..."
 
     # Try the 'preferred' solution
-    mariadb-install-db --user=root --auth-root-authentication-method=socket --skip-test-db 
+    mariadb-install-db --user=mysql --auth-root-authentication-method=socket --skip-test-db 
     if [ $? -ne 0 ]; then
         # Fall back to the 'depreciated' solution
         mysql_install_db > /dev/null 2>&1
