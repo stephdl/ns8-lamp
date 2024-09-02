@@ -148,18 +148,9 @@ RUN echo "Editing APACHE_RUN_GROUP environment variable" && \
 RUN echo "Setting up MySQL directories" && \
         mkdir -p /var/run/mysqld && \
         mkdir -p /var/log/mysql && \
-        touch /var/log/mysql/error.log
+        chown -R mysql:mysql /var/run/mysqld && \
+        chown -R mysql:mysql /var/log/mysql
 
-RUN echo "Editing MySQL config" && \
-        sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf && \
-        sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf && \
-        sed -i "s/user.*/user = www-data/" /etc/mysql/mariadb.conf.d/50-server.cnf && \
-        sed -i "s|#log_error = /var/log/mysql/error.log|log_error = /var/log/mysql/error.log|" /etc/mysql/mariadb.conf.d/50-server.cnf && \
-        sed -i "s/skip_log_error/#skip_log_error/" /etc/mysql/mariadb.conf.d/50-mysqld_safe.cnf && \
-        sed -i "s/syslog/#syslog/" /etc/mysql/mariadb.conf.d/50-mysqld_safe.cnf
-
-RUN echo "# log mysql to stderr" && \
-        ln -sf /dev/stderr /var/log/mysql/error.log
 # clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
