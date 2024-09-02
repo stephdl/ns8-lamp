@@ -4,7 +4,7 @@ set -e
 # Redirect any output to the journal (stderr)
 exec 1>&2
 
-mysqld_safe --socket=/var/run/mysqld/mysqld.sock --user=root > /dev/null 2>&1 &
+mysqld_safe --socket=/var/run/mysqld/mysqld.sock --user=mysql > /dev/null 2>&1 &
 RET=1
 while [[ RET -ne 0 ]]; do
     echo "=> Waiting for confirmation of MySQL service startup"
