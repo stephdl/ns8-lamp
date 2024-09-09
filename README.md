@@ -95,6 +95,45 @@ chown -R www-data:staff wp-admin/
 
 You can use a `.htaccess` file directly in the `/app` directory of the container. It will be read and applied accordingly.
 
+### Custom mysql directives
+
+to customize mysql you can edit the following files (included in the backup)
+
+mysql -> mysql.cnf
+mysqldump -> mysqldump.cnf
+
+```
+runagent -m lamp1
+nano conf.d/mysql.cnf
+```
+
+add for example to customize `max_allowed_packet`
+
+```
+[mysql]
+max_allowed_packet=500M
+[mysqld]
+max_allowed_packet=500M
+```
+
+check by:
+
+`runagent -m lamp1  podman exec -ti lamp-app mysql --print-defaults`
+
+The mysql --print-defaults command only shows the options that would be used for the client, not for the MySQL server (mysqld).
+
+to see the default options of mysql server do:
+
+`runagent -m lamp1  podman exec -ti lamp-app mysqld --print-defaults`
+
+
+alternatively you can connect directly to the container and modify
+
+```
+/etc/mysql/conf.d/myqsl.cnf
+/etc/mysql/conf.d/myqsldump.cnf
+```
+
 ## Install
 
 Instantiate the module with:
