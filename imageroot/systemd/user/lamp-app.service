@@ -27,6 +27,8 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/lamp-app.pid \
     --volume mysql:/var/lib/mysql:Z \
     --volume app:/app:Z \
     --volume ./initdb.d:/initdb.d:Z \
+    --volume ./conf.d/mysql.cnf:/etc/mysql/conf.d/mysql.cnf:Z \
+    --volume ./conf.d/mysqldump.cnf:/etc/mysql/conf.d/mysqldump.cnf:Z \
     --env SMTP_* \
     --env LAMP_* \
     --env CREATE_MYSQL_USER=${CREATE_MYSQL_USER} \
