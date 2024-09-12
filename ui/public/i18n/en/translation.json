@@ -64,7 +64,7 @@
     "mysql_user_db_placeholder": "Enter MySQL database name",
     "mysql_user_db_tooltip": "Name of the MySQL database to create",
     "mysql_user_db_helper": "This database cannot be changed from the UI once set",
-    "phmyadmin_enabled": "Enable phpMyAdmin"
+    "phpmyadmin_enabled": "Enable phpMyAdmin"
   },
   "about": {
     "title": "About"
