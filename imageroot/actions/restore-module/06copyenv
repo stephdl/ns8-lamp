@@ -20,7 +20,8 @@ for evar in [
         "MYSQL_USER_NAME",
         "MYSQL_USER_DB",
         "CREATE_MYSQL_USER",
-        "PHP_UPLOAD_MAX_FILESIZE"
+        "PHP_UPLOAD_MAX_FILESIZE",
+        "PHPMYADMIN_ENABLED",
     ]:
     agent.set_env(evar, original_environment[evar])
 
