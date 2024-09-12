@@ -13,7 +13,8 @@
       "mysql_admin_pass": "password",
       "mysql_user_db": "database",
       "create_mysql_user": true,
-      "php_upload_max_filesize": "100M"
+      "php_upload_max_filesize": "100M",
+      "phmyadmin_enabled": true
     }
   ],
   "type": "object",
@@ -26,7 +27,8 @@
     "mysql_admin_pass",
     "mysql_user_db",
     "create_mysql_user",
-    "php_upload_max_filesize"
+    "php_upload_max_filesize",
+    "phmyadmin_enabled"
   ],
   "properties": {
     "host": {
@@ -72,6 +74,11 @@
       "type": "string",
       "title": "PHP upload max filesize",
       "description": "PHP upload max filesize"
+    },
+    "phmyadmin_enabled": {
+      "type": "boolean",
+      "title": "Enable phpMyAdmin",
+      "description": "Enable phpMyAdmin"
     }
   }
 }
