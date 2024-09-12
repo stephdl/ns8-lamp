@@ -26,7 +26,8 @@
     "configure": "Configure",
     "open_phpmyadmin": "Open phpMyAdmin",
     "configure_mysql_database": "Configure MySQL database",
-    "lamp_phpmyadmin": "lamp phpMyAdmin"
+    "lamp_phpmyadmin": "lamp phpMyAdmin",
+    "phpmyadmin_disabled": "phpMyAdmin is disabled"
   },
   "settings": {
     "title": "Settings",
