@@ -79,7 +79,7 @@
           <NsInfoCard
             light
             :title="$t('status.lamp_phpmyadmin')"
-            :description="$t('status.configure_mysql_database')"
+            :description="phpmyadmin ? $t('status.configure_mysql_database') : $t('status.phpmyadmin_disabled')"
             :icon="Wikis32"
             :loading="loading.getConfiguration"
             :isErrorShown="error.getConfiguration"
@@ -90,6 +90,7 @@
             <template slot="content">
               <NsButton
                 kind="ghost"
+                v-if="phpmyadmin_enabled"
                 :icon="Launch20"
                 :disabled="loading.getConfiguration"
                 @click="goToWebphpmyadmin"
@@ -343,6 +344,7 @@ export default {
       isRedirectChecked: false,
       redirectTimeout: 0,
       host: "",
+      phpmyadmin_enabled: true,
       status: {
         instance: "",
         services: [],
@@ -461,6 +463,7 @@ export default {
     getConfigurationCompleted(taskContext, taskResult) {
       const config = taskResult.output;
       this.host = config.host;
+      this.phpmyadmin_enabled = config.phpmyadmin_enabled;
       this.loading.getConfiguration = false;
     },
     async getStatus() {

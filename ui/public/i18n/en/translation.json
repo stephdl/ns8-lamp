@@ -26,7 +26,8 @@
     "configure": "Configure",
     "open_phpmyadmin": "Open phpMyAdmin",
     "configure_mysql_database": "Configure MySQL database",
-    "lamp_phpmyadmin": "lamp phpMyAdmin"
+    "lamp_phpmyadmin": "lamp phpMyAdmin",
+    "phpmyadmin_disabled": "phpMyAdmin is disabled"
   },
   "settings": {
     "title": "Settings",
@@ -63,10 +64,8 @@
     "mysql_user_db": "MySQL database name",
     "mysql_user_db_placeholder": "Enter MySQL database name",
     "mysql_user_db_tooltip": "Name of the MySQL database to create",
-    "mysql_user_db_helper": "This database cannot be changed from the UI once set"
-
-
-
+    "mysql_user_db_helper": "This database cannot be changed from the UI once set",
+    "phpmyadmin_enabled": "Enable phpMyAdmin"
   },
   "about": {
     "title": "About"

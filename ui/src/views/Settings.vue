@@ -85,6 +85,22 @@
                 <template slot="title">{{ $t("settings.advanced") }}</template>
                 <template slot="content">
                   <cv-toggle
+                    value="phpmyadmin_enabled"
+                    :label="$t('settings.phpmyadmin_enabled')"
+                    v-model="phpmyadmin_enabled"
+                    :disabled="
+                      loading.getConfiguration || loading.configureModule
+                    "
+                    class="mg-bottom"
+                  >
+                    <template slot="text-left">{{
+                      $t("settings.disabled")
+                    }}</template>
+                    <template slot="text-right">{{
+                      $t("settings.enabled")
+                    }}</template>
+                  </cv-toggle>
+                  <cv-toggle
                     value="create_mysql_user"
                     :label="$t('settings.create_mysql_user')"
                     v-model="create_mysql_user"
@@ -160,10 +176,11 @@
                     :label="$t('settings.php_upload_max_filesize')"
                     v-model="php_upload_max_filesize"
                     type="number"
-                    :placeholder="$t('settings.php_upload_max_filesize_placeholder')"
+                    :placeholder="
+                      $t('settings.php_upload_max_filesize_placeholder')
+                    "
                     :disabled="
-                      loading.getConfiguration ||
-                      loading.configureModule
+                      loading.getConfiguration || loading.configureModule
                     "
                     :invalid-message="$t(error.php_upload_max_filesize)"
                     ref="php_upload_max_filesize"
@@ -232,6 +249,7 @@ export default {
       host: "",
       isLetsEncryptEnabled: false,
       isHttpToHttpsEnabled: true,
+      phpmyadmin_enabled: true,
       create_mysql_user: false,
       php_upload_max_filesize: "100",
       mysql_user_name: "",
@@ -329,6 +347,7 @@ export default {
       this.loading.getConfiguration = false;
       this.create_mysql_user = config.create_mysql_user;
       this.php_upload_max_filesize = config.php_upload_max_filesize;
+      this.phpmyadmin_enabled = config.phpmyadmin_enabled;
       this.focusElement("host");
     },
     validateConfigureModule() {
@@ -450,6 +469,7 @@ export default {
             mysql_admin_pass: this.mysql_admin_pass,
             create_mysql_user: this.create_mysql_user,
             php_upload_max_filesize: this.php_upload_max_filesize,
+            phpmyadmin_enabled: this.phpmyadmin_enabled,
           },
           extra: {
             title: this.$t("settings.instance_configuration", {
