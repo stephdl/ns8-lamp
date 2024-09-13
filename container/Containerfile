@@ -122,7 +122,12 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 
 # config to enable .htaccess
 ADD apache_default /etc/apache2/sites-available/000-default.conf
-RUN a2enmod rewrite
+RUN a2enmod rewrite 
+
+# enable real IP logging
+RUN a2enmod remoteip && echo "RemoteIPHeader X-Forwarded-For" > /etc/apache2/conf-available/remoteip.conf && \
+    echo "RemoteIPInternalProxy 10.0.0.0/8" >> /etc/apache2/conf-available/remoteip.conf && \
+    a2enconf remoteip
 
 RUN echo "# log apache to stderr" && \
         ln -sf /dev/stderr /var/log/apache2/access.log && \
