@@ -79,7 +79,7 @@
           <NsInfoCard
             light
             :title="$t('status.lamp_phpmyadmin')"
-            :description="phpmyadmin ? $t('status.configure_mysql_database') : $t('status.phpmyadmin_disabled')"
+            :description="phpmyadmin_enabled ? $t('status.configure_mysql_database') : $t('status.phpmyadmin_disabled')"
             :icon="Wikis32"
             :loading="loading.getConfiguration"
             :isErrorShown="error.getConfiguration"

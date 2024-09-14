@@ -50,7 +50,7 @@ echo "Editing phpmyadmin config" && \
     sed -i "s/cfg\['blowfish_secret'\] = ''/cfg['blowfish_secret'] = '`openssl rand -hex 16`'/" /var/www/phpmyadmin/config.inc.php
 
 # Check if phpMyAdmin is enabled
-if [[ "$PHPMYADMIN_ENABLED" != "True" ]]; then
+if [[ "$PHPMYADMIN_ENABLED" == "False" ]]; then
     echo "Disabling phpMyAdmin"
     sed -i "s|Alias /phpmyadmin /var/www/phpmyadmin|# phpmyadmin disabled|" /etc/apache2/sites-available/000-default.conf
 else
