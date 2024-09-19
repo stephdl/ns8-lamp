@@ -23,7 +23,7 @@ ExecStartPre=-runagent discover-ldap
 ExecStartPre=/bin/mkdir -vp initdb.d
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/lamp-app.pid \
     --cidfile %t/lamp-app.ctr-id --cgroups=no-conmon \
-    --pod-id-file %t/lamp.pod-id --replace -d --name  lamp-app \
+    --pod-id-file %t/lamp.pod-id --replace -d --name  apache2-lamp-app \
     --volume mysql:/var/lib/mysql:Z \
     --volume app:/app:Z \
     --volume ./initdb.d:/initdb.d:Z \
