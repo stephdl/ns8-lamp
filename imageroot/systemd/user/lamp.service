@@ -10,8 +10,8 @@
 
 [Unit]
 Description=Podman lamp.service
-Requires=lamp-app.service
-Before=lamp-app.service
+Requires=apache2-app.service
+Before=apache2-app.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
