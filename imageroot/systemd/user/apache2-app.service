@@ -17,12 +17,12 @@ EnvironmentFile=-%S/state/discovery.env
 WorkingDirectory=%S/state
 Restart=always
 TimeoutStopSec=70
-ExecStartPre=/bin/rm -f %t/lamp-app.pid %t/lamp-app.ctr-id
+ExecStartPre=/bin/rm -f %t/apache2-app.pid %t/apache2-app.ctr-id
 ExecStartPre=-runagent discover-smarthost
 ExecStartPre=-runagent discover-ldap
 ExecStartPre=/bin/mkdir -vp initdb.d
-ExecStart=/usr/bin/podman run --conmon-pidfile %t/lamp-app.pid \
-    --cidfile %t/lamp-app.ctr-id --cgroups=no-conmon \
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/apache2-app.pid \
+    --cidfile %t/apache2-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/lamp.pod-id --replace -d --name  apache2-app \
     --volume mysql:/var/lib/mysql:Z \
     --volume app:/app:Z \
@@ -40,11 +40,11 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/lamp-app.pid \
     --env PHP_UPLOAD_MAX_FILESIZE=${PHP_UPLOAD_MAX_FILESIZE} \
     --env PHPMYADMIN_ENABLED=${PHPMYADMIN_ENABLED} \
     ${LAMP_SERVER_IMAGE}
-ExecStop=/usr/bin/podman stop --ignore --cidfile %t/lamp-app.ctr-id -t 10
-ExecReload=/usr/bin/podman kill -s HUP lamp-app
+ExecStop=/usr/bin/podman stop --ignore --cidfile %t/apache2-app.ctr-id -t 10
+ExecReload=/usr/bin/podman kill -s HUP apache2-app
 SyslogIdentifier=%u
-ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/lamp-app.ctr-id
-PIDFile=%t/lamp-app.pid
+ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/apache2-app.ctr-id
+PIDFile=%t/apache2-app.pid
 Type=forking
 
 [Install]

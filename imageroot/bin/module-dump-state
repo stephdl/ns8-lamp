@@ -11,7 +11,7 @@ if ! systemctl --user -q is-active lamp.service; then
     exit 0
 fi
 
-podman exec lamp-app mysqldump \
+podman exec apache2-app mysqldump \
         --all-databases \
         --default-character-set=utf8mb4 \
         --skip-dump-date \
