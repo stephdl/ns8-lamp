@@ -54,7 +54,7 @@ else
     echo "=> Done!"
 
     echo "========================================================================"
-    echo "You can now connect to this MySQL Server using: podman exec -ti lamp-app mysql"
+    echo "You can now connect to this MySQL Server using: podman exec -ti apache2-app mysql"
     echo ""
     echo "MySQL user 'root' has no password but only allows local connections"
     echo ""

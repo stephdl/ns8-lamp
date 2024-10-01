@@ -8,11 +8,11 @@ NS8-LAMP is a containerized environment that encapsulates the LAMP stack, which 
 Use the /app directory as the storage location for your web application. You can access it by running the following command:
 
 
-    runagent -m lamp1 podman exec -ti apache2-lamp-app bash
+    runagent -m lamp1 podman exec -ti apache2-app bash
 or
 ```
     runagent -m lamp1
-    podman exec -ti apache2-lamp-app bash
+    podman exec -ti apache2-app bash
 ```
 
 Once inside the container, navigate to the /app directory:
@@ -61,7 +61,7 @@ Once you have saved the FQDN in the user interface, in your browser, go to https
 
 - Access the container to download the web application.
 
-`runagent -m lamp1 podman exec -ti apache2-lamp-app bash`
+`runagent -m lamp1 podman exec -ti apache2-app bash`
 
 - go to the web folder within the container.
   
@@ -128,17 +128,17 @@ once modified you have to restart the container
 
 check by:
 
-`podman exec -ti apache2-lamp-app mysql --print-defaults`
+`podman exec -ti apache2-app mysql --print-defaults`
 
 The `mysql --print-defaults` command only shows the options that would be used for the client, not for the MySQL server (mysqld).
 
 to see the default options of mysql server do:
 
-`podman exec -ti apache2-lamp-app mysqld --print-defaults`
+`podman exec -ti apache2-app mysqld --print-defaults`
 
 alternatively you can connect directly to the container and modify
 
-`podman exec -ti apache2-lamp-app bash`
+`podman exec -ti apache2-app bash`
 
 ```
 nano /etc/mysql/conf.d/myqsl.cnf
@@ -258,7 +258,7 @@ execute it by : `php /path/2/script`
 
 You can add the environment variable `LAMP_LDAP_DOMAIN` to the `~/.config/state/environment` file. Set it with the domain name you want to bind.
 After that, restart the lamp systemd service. The complete bind credentials should be available as environment variables in the discovery.env file.
-These credentials should also be mounted as environment variables in the lamp-app container.
+These credentials should also be mounted as environment variables in the apache2-app container.
 
 to modify:
 
@@ -277,7 +277,7 @@ check if everything is correctly written
 
 ```
 cat discovery.env
-podman exec -ti apache2-lamp-app env
+podman exec -ti apache2-app env
 ```
 
 ## Debug
@@ -307,13 +307,13 @@ podman ps
 
 you can see what environment variable is inside the container
 ```
-podman exec  apache2-lamp-app env
+podman exec  apache2-app env
 ```
 
 you can run a shell inside the container
 
 ```
-podman exec -ti   apache2-lamp-app bash
+podman exec -ti   apache2-app bash
 / # 
 ```
 ## Testing

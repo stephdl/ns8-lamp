@@ -12,4 +12,10 @@ set -e
 # Redirect any output to the journal (stderr)
 exec 1>&2
 
+# Remove old service
+if [ -f ../systemd/user/lamp-app.service ]; then
+    systemctl --user stop lamp-app.service
+    rm ../systemd/user/lamp-app.service
+fi
+# Restart service
 systemctl --user try-restart lamp.service
