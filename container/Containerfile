@@ -123,7 +123,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 
 # config to enable .htaccess
 ADD apache_default /etc/apache2/sites-available/000-default.conf
-RUN a2enmod rewrite 
+RUN a2enmod rewrite proxy_http headers expires
 
 # enable real IP logging
 RUN a2enmod remoteip && echo "RemoteIPHeader X-Forwarded-For" > /etc/apache2/conf-available/remoteip.conf && \
